@@ -1,4 +1,5 @@
 import uuid, os
+import pickle
 from typing import Dict, Any, Optional, List, Set
 from google.cloud import aiplatform
 
@@ -43,6 +44,28 @@ class KnowledgeGraph:
         self.edges: List[Edge] = []
         self._adjacency_list: Optional[Dict[str, List[Edge]]] = None
 
+    def __repr__(self) -> str:
+        """Requirement 4: Generates a node-centric string representation of the graph."""
+        if not self.nodes:
+            return "KnowledgeGraph is empty."
+        
+        output = ["Knowledge Graph Context:\n"]
+        if self._adjacency_list is None:
+            self._build_adjacency_list()
+
+        for node_id, node in self.nodes.items():
+            output.append(f"  - Node: {node.name} ({node.type}) [ID: {node.id}]")
+            connections = self._adjacency_list.get(node_id, [])
+            if connections:
+                for edge in connections:
+                    if edge.source.id == node_id:
+                        output.append(f"    - {edge.relation} -> {edge.target.name} ({edge.target.type})")
+                    else:
+                        output.append(f"    - is {edge.relation} of <- {edge.source.name} ({edge.source.type})")
+            else:
+                output.append("    - (No direct connections in this context)")
+        return "\n".join(output)
+    
     def get_or_create_node(self, name: str, node_type: str, attributes: Dict[str, Any], page_no: Any) -> Node:
         """Requirement 1 & 2: Adds a node if it's new, or returns the existing one."""
         node_id = f"{node_type.lower()}_{sanitize_name(name).lower()}"
@@ -76,6 +99,23 @@ class KnowledgeGraph:
         """Retrieves a node from the graph by its unique ID."""
         return self.nodes.get(node_id)
 
+    def save(self, directory: str):
+        """Requirement 1: Saves the entire KnowledgeGraph object to a file."""
+        os.makedirs(directory, exist_ok=True)
+        filepath = os.path.join(directory, f"{self.doc_id}.graph")
+        with open(filepath, 'wb') as f:
+            pickle.dump(self, f)
+        print(f"Knowledge graph saved to {filepath}")
+
+    @staticmethod
+    def load(doc_id: str, directory: str) -> Optional['KnowledgeGraph']:
+        """Requirement 2: Loads a KnowledgeGraph object from a file."""
+        filepath = os.path.join(directory, f"{doc_id}.graph")
+        if not os.path.exists(filepath):
+            return None
+        with open(filepath, 'rb') as f:
+            return pickle.load(f)
+        
     def store_in_vector_db(self):
         """Requirement 3: Generates embeddings for all edges and stores them in Vertex AI."""
         if not index_endpoint:

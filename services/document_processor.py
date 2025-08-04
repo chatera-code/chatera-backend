@@ -106,7 +106,7 @@ async def process_document(doc_id: str, client_id: str, file_path: str, filename
         # After all chunks are processed, store the complete graph's relations
         if graph.edges:
             await manager.send_message(client_id, f"Storing {len(graph.edges)} graph relationships...")
-            store_graph_in_vertex_ai(doc_id, filename, graph)
+            graph.store_in_vector_db()
 
         document.status = 'completed'; await manager.send_message(client_id, f"Processing complete."); db.commit()
     except Exception as e:

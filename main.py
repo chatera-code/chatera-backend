@@ -20,7 +20,4 @@ async def read_root():
     return {"message": "Welcome to the Cloud-Native RAG Ingestion API"}
 
 # To run this application:
-# 1. Create the directory structure as outlined in the comments.
-# 2. Save each code block into its corresponding file.
-# 3. Ensure all environment variables are set correctly.
-# 4. Run from the root of the project (`rag_project/`): uvicorn main:app --reload
+# 4. Run from the root of the project (`chatera-backend/`): uvicorn main:app --reload

@@ -61,9 +61,9 @@ else:
 
 # 3. Vertex AI Vector Search Client
 VERTEX_AI_INDEX_ID = os.getenv("VERTEX_AI_INDEX_ID")
-VERTEX_AI_INDEX_ENDPOINT_ID = os.getenv("VERTEX_AI_INDEX_ENDPOINT_ID")
+VERTEX_AI_DEPLOYED_INDEX_ID = os.getenv("VERTEX_AI_INDEX_ENDPOINT_ID")
 index_endpoint = None
-if VERTEX_AI_INDEX_ID and VERTEX_AI_INDEX_ENDPOINT_ID:
-    index_endpoint = aiplatform.MatchingEngineIndexEndpoint(index_endpoint_name=VERTEX_AI_INDEX_ENDPOINT_ID)
+if VERTEX_AI_INDEX_ID and VERTEX_AI_DEPLOYED_INDEX_ID:
+    index_endpoint = aiplatform.MatchingEngineIndexEndpoint(index_endpoint_name=VERTEX_AI_DEPLOYED_INDEX_ID)
 else:
     print("Warning: Vertex AI Index/Endpoint IDs not set. Vector storage will be skipped.")
