@@ -2,16 +2,23 @@ import asyncio
 import json
 import os
 from typing import List, Dict
+import logging
 
 import google.generativeai as genai
 from sqlalchemy.orm import Session
 
 from core.database import SessionLocal
 from core.models import Document
-from services.storage import store_tables_in_mysql, store_paragraphs_in_vertex_ai, store_graph_in_vertex_ai
+from services.storage import store_tables_in_mysql, store_paragraphs_in_vertex_ai
 from services.knowledge_graph import KnowledgeGraph
 from services.utils import split_pdf
 from api.websockets import manager
+
+# Use the configured logger
+logger = logging.getLogger(__name__)
+
+# Define directories at the top level
+GRAPH_DIR = "knowledge_graphs"
 
 def build_gemini_prompt(knowledge_context: List[Dict]) -> str:
     """Builds the prompt for the Gemini API, including the knowledge context."""
@@ -54,28 +61,38 @@ async def process_document(doc_id: str, client_id: str, file_path: str, filename
         document = db.query(Document).filter(Document.doc_id == doc_id).first()
         if not document:
             await manager.send_message(client_id, f"Error: Document {doc_id} not found.")
+            logger.error(f"Document with doc_id {doc_id} not found in the database.")
             return
 
         await manager.send_message(client_id, f"Analyzing and splitting document...")
         temp_chunk_paths = split_pdf(file_path, doc_id, chunk_dir)
         await manager.send_message(client_id, f"Document split into {len(temp_chunk_paths)} chunk(s).")
+        logger.info(f"Document {doc_id} split into {len(temp_chunk_paths)} chunks.")
         
-        document.status = 'processing'; db.commit()
+        document.status = 'processing'
+        db.commit()
 
-        knowledge_context, all_extracted_data = [], []
-        graph = KnowledgeGraph() # Initialize the graph for the entire document
+        all_extracted_data = []
+        knowledge_context = ""
+        graph = KnowledgeGraph(doc_id=doc_id, filename=filename) # Initialize the graph
 
         for idx, chunk_path in enumerate(temp_chunk_paths):
-            page_range = f"pages {idx*10 + 1}-{min((idx+1)*10, 9999)}"
+            page_range = f"pages {idx*10 + 1}-{min((idx+1)*10, len(temp_chunk_paths)*10)}"
             await manager.send_message(client_id, f"Processing chunk {idx+1}/{len(temp_chunk_paths)} ({page_range})...")
+            logger.info(f"Processing chunk {idx+1}/{len(temp_chunk_paths)} for doc_id {doc_id}.")
 
             def sync_gemini_call():
-                gemini_file = genai.upload_file(path=chunk_path, display_name=os.path.basename(chunk_path))
-                prompt = build_gemini_prompt(knowledge_context)
-                model = genai.GenerativeModel('models/gemini-1.5-pro-latest')
-                response = model.generate_content([prompt, gemini_file])
-                genai.delete_file(gemini_file.name)
-                return response.text
+                """Synchronous wrapper for the Gemini API call."""
+                try:
+                    gemini_file = genai.upload_file(path=chunk_path, display_name=os.path.basename(chunk_path))
+                    prompt = build_gemini_prompt(knowledge_context)
+                    model = genai.GenerativeModel('models/gemini-1.5-pro-latest')
+                    response = model.generate_content([prompt, gemini_file])
+                    genai.delete_file(gemini_file.name)
+                    return response.text
+                except Exception as e:
+                    logger.error(f"Gemini API call failed for chunk {chunk_path}: {e}")
+                    raise
 
             response_text = await asyncio.to_thread(sync_gemini_call)
             
@@ -85,36 +102,51 @@ async def process_document(doc_id: str, client_id: str, file_path: str, filename
                 
                 if "relations" in data and isinstance(data["relations"], list):
                     knowledge_context.extend(data["relations"])
-                    # Populate the graph with relations from this chunk
                     for rel in data["relations"]:
                         graph.add_relation(rel, page_range)
 
                 if "tables" in data:
                     await manager.send_message(client_id, f"Storing {len(data['tables'])} tables...")
                     store_tables_in_mysql(doc_id, filename, data["tables"])
+                    
                 if "paragraphs" in data:
                     await manager.send_message(client_id, f"Storing {len(data['paragraphs'])} paragraphs...")
                     store_paragraphs_in_vertex_ai(doc_id, filename, data["paragraphs"])
                 
                 all_extracted_data.append({"chunk": idx + 1, "data": data})
-                document.extracted_data = all_extracted_data; db.commit()
+                document.extracted_data = all_extracted_data
+                db.commit()
                 await manager.send_message(client_id, f"Chunk {idx+1} processed and stored successfully.")
+                knowledge_context = repr(graph)
+                
             except Exception as e:
-                await manager.send_message(client_id, f"Error parsing/storing data for chunk {idx+1}: {e}")
+                logger.error(f"Error parsing/storing data for chunk {idx+1} of doc_id {doc_id}: {e}")
+                await manager.send_message(client_id, f"Error processing chunk {idx+1}: {e}")
                 raise
 
-        # After all chunks are processed, store the complete graph's relations
+        # After all chunks are processed, store the complete graph
         if graph.edges:
             await manager.send_message(client_id, f"Storing {len(graph.edges)} graph relationships...")
-            graph.store_in_vector_db()
+            graph.store_in_vector_db() #
+            graph.save(GRAPH_DIR) # Save graph object for querying
 
-        document.status = 'completed'; await manager.send_message(client_id, f"Processing complete."); db.commit()
+        document.status = 'completed'
+        await manager.send_message(client_id, f"Processing complete.")
+        db.commit()
+        logger.info(f"Successfully completed processing for doc_id: {doc_id}")
+
     except Exception as e:
+        logger.critical(f"A critical error occurred during document processing for doc_id {doc_id}: {e}", exc_info=True)
         document = db.query(Document).filter(Document.doc_id == doc_id).first()
-        if document: document.status = 'error'; db.commit()
-        await manager.send_message(client_id, f"An error occurred: {e}")
+        if document:
+            document.status = 'error'
+            db.commit()
+        await manager.send_message(client_id, f"An error occurred during processing: {e}")
     finally:
-        if os.path.exists(file_path): os.remove(file_path)
+        # Clean up temporary files
+        if os.path.exists(file_path):
+            os.remove(file_path)
         for path in temp_chunk_paths:
-            if os.path.exists(path): os.remove(path)
+            if os.path.exists(path):
+                os.remove(path)
         db.close()

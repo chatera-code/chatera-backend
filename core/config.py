@@ -1,8 +1,16 @@
 import os
+import logging
+from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from google.cloud import aiplatform
 from google.cloud.sql.connector import Connector
 import google.generativeai as genai
+from vertexai.language_models import TextEmbeddingModel
+
+load_dotenv()
+# Configure logging
+# Use the root logger configured in main.py
+logger = logging.getLogger(__name__)
 
 # --- General GCP & API Configuration ---
 try:
@@ -17,8 +25,12 @@ try:
     genai.configure(api_key=GOOGLE_API_KEY)
     aiplatform.init(project=GCP_PROJECT_ID, location=GCP_REGION)
     
+    embedding_model = TextEmbeddingModel.from_pretrained("text-embedding-004")
+    logger.info("TextEmbeddingModel 'text-embedding-004' loaded successfully.")
+
+
 except ValueError as e:
-    print(f"Error initializing GCP clients: {e}")
+    logger.critical(f"Error initializing GCP clients: {e}")
     exit()
 
 # --- Database Engines ---
@@ -34,36 +46,46 @@ USE_CLOUD_SQL = os.getenv("USE_CLOUD_SQL", "false").lower() == "true"
 engine_mysql = None
 
 if USE_CLOUD_SQL:
-    DB_USER = os.getenv("DB_USER")
+    DB_USER = os.getenv("DB_USER") 
     DB_PASS = os.getenv("DB_PASS")
-    # DB_NAME is no longer used for the initial connection, as we create DBs dynamically
     INSTANCE_CONNECTION_NAME = os.getenv("INSTANCE_CONNECTION_NAME")
     
     if all([DB_USER, DB_PASS, INSTANCE_CONNECTION_NAME]):
-        connector = Connector()
-        def getconn():
-            # Connect without specifying a database initially to allow for CREATE DATABASE commands
-            return connector.connect(
-                INSTANCE_CONNECTION_NAME, "pymysql",
-                user=DB_USER, password=DB_PASS
-            )
-        engine_mysql = create_engine("mysql+pymysql://", creator=getconn)
+        try:
+            connector = Connector()
+            def getconn():
+                return connector.connect(
+                    INSTANCE_CONNECTION_NAME, "pymysql",
+                    user=DB_USER, password=DB_PASS
+                )
+            engine_mysql = create_engine("mysql+pymysql://", creator=getconn)
+        except Exception as e:
+            logger.error(f"Failed to initialize Cloud SQL connector: {e}")
+            engine_mysql = None
     else:
-        print("Warning: Cloud SQL environment variables not fully set. Table storage will be skipped.")
+        logger.warning("Cloud SQL environment variables not fully set. Table storage will be skipped.")
 else:
     # For local dev, the URL should point to the server, not a specific DB
-    # e.g., "mysql+pymysql://user:password@localhost/"
     MYSQL_URL = os.getenv("MYSQL_URL")
     if MYSQL_URL:
         engine_mysql = create_engine(MYSQL_URL)
     else:
-        print("Warning: MYSQL_URL not set for local development. Table storage will be skipped.")
+        logger.warning("MYSQL_URL not set for local development. Table storage will be skipped.")
 
 # 3. Vertex AI Vector Search Client
-VERTEX_AI_INDEX_ID = os.getenv("VERTEX_AI_INDEX_ID")
-VERTEX_AI_DEPLOYED_INDEX_ID = os.getenv("VERTEX_AI_INDEX_ENDPOINT_ID")
+VERTEX_AI_INDEX_ID = os.getenv("VERTEX_AI_INDEX_ID") 
+VERTEX_AI_INDEX_ENDPOINT_ID = os.getenv("VERTEX_AI_INDEX_ENDPOINT_ID") 
+VERTEX_AI_DEPLOYED_INDEX_ID = os.getenv("VERTEX_AI_DEPLOYED_INDEX_ID") # This is needed for querying, not initialization
 index_endpoint = None
-if VERTEX_AI_INDEX_ID and VERTEX_AI_DEPLOYED_INDEX_ID:
-    index_endpoint = aiplatform.MatchingEngineIndexEndpoint(index_endpoint_name=VERTEX_AI_DEPLOYED_INDEX_ID)
+
+if VERTEX_AI_INDEX_ID and VERTEX_AI_INDEX_ENDPOINT_ID:
+    try:
+        # **CORRECTION HERE:** Use the Index *Endpoint* ID to initialize the endpoint object.
+        index_endpoint = aiplatform.MatchingEngineIndexEndpoint(
+            index_endpoint_name=VERTEX_AI_INDEX_ENDPOINT_ID
+        )
+        logger.info(f"Successfully connected to Vertex AI Index Endpoint: {VERTEX_AI_INDEX_ENDPOINT_ID}")
+    except Exception as e:
+        logger.error(f"Failed to initialize Vertex AI Index Endpoint: {e}")
 else:
-    print("Warning: Vertex AI Index/Endpoint IDs not set. Vector storage will be skipped.")
+    logger.warning("Vertex AI Index/Endpoint IDs not set in environment variables. Vector storage and querying will be skipped.")

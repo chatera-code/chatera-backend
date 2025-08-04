@@ -1,10 +1,14 @@
-import uuid, os
+import uuid
+import os
 import pickle
 from typing import Dict, Any, Optional, List, Set
 from google.cloud import aiplatform
+import logging
 
 from .utils import sanitize_name
-from core.config import index_endpoint, VERTEX_AI_INDEX_ID, GCP_PROJECT_ID, GCP_REGION
+from core.config import index_endpoint, embedding_model, VERTEX_AI_INDEX_ID, VERTEX_AI_DEPLOYED_INDEX_ID
+
+logger = logging.getLogger(__name__)
 
 class Node:
     """Represents a single node in the knowledge graph."""
@@ -45,7 +49,7 @@ class KnowledgeGraph:
         self._adjacency_list: Optional[Dict[str, List[Edge]]] = None
 
     def __repr__(self) -> str:
-        """Requirement 4: Generates a node-centric string representation of the graph."""
+        """Generates a node-centric string representation of the graph."""
         if not self.nodes:
             return "KnowledgeGraph is empty."
         
@@ -67,7 +71,7 @@ class KnowledgeGraph:
         return "\n".join(output)
     
     def get_or_create_node(self, name: str, node_type: str, attributes: Dict[str, Any], page_no: Any) -> Node:
-        """Requirement 1 & 2: Adds a node if it's new, or returns the existing one."""
+        """Adds a node if it's new, or returns the existing one."""
         node_id = f"{node_type.lower()}_{sanitize_name(name).lower()}"
         if node_id not in self.nodes:
             self.nodes[node_id] = Node(name, node_type, attributes, page_no)
@@ -84,68 +88,82 @@ class KnowledgeGraph:
             return
 
         source_node = self.get_or_create_node(
-            name=source_data.get("name"), node_type=source_data.get("type"),
+            name=source_data.get("name"), node_type=source_data.get("type", "Unknown"),
             attributes=source_data.get("attributes", {}), page_no=page_no
         )
         target_node = self.get_or_create_node(
-            name=target_data.get("name"), node_type=target_data.get("type"),
+            name=target_data.get("name"), node_type=target_data.get("type", "Unknown"),
             attributes=target_data.get("attributes", {}), page_no=page_no
         )
         
         edge = Edge(source_node, target_node, relation, comment, page_no)
         self.edges.append(edge)
+        self._adjacency_list = None # Invalidate adjacency list
 
     def get_node_by_id(self, node_id: str) -> Optional[Node]:
         """Retrieves a node from the graph by its unique ID."""
         return self.nodes.get(node_id)
 
     def save(self, directory: str):
-        """Requirement 1: Saves the entire KnowledgeGraph object to a file."""
+        """Saves the entire KnowledgeGraph object to a file."""
         os.makedirs(directory, exist_ok=True)
         filepath = os.path.join(directory, f"{self.doc_id}.graph")
-        with open(filepath, 'wb') as f:
-            pickle.dump(self, f)
-        print(f"Knowledge graph saved to {filepath}")
+        try:
+            with open(filepath, 'wb') as f:
+                pickle.dump(self, f)
+            logger.info(f"Knowledge graph for doc_id {self.doc_id} saved to {filepath}")
+        except Exception as e:
+            logger.error(f"Failed to save knowledge graph for doc_id {self.doc_id}: {e}")
 
     @staticmethod
     def load(doc_id: str, directory: str) -> Optional['KnowledgeGraph']:
-        """Requirement 2: Loads a KnowledgeGraph object from a file."""
+        """Loads a KnowledgeGraph object from a file."""
         filepath = os.path.join(directory, f"{doc_id}.graph")
         if not os.path.exists(filepath):
+            logger.warning(f"Knowledge graph file not found for doc_id {doc_id} at {filepath}")
             return None
-        with open(filepath, 'rb') as f:
-            return pickle.load(f)
+        try:
+            with open(filepath, 'rb') as f:
+                return pickle.load(f)
+        except Exception as e:
+            logger.error(f"Failed to load knowledge graph for doc_id {doc_id}: {e}")
+            return None
         
     def store_in_vector_db(self):
-        """Requirement 3: Generates embeddings for all edges and stores them in Vertex AI."""
+        """Generates embeddings for all edges and stores them in Vertex AI."""
         if not index_endpoint:
-            print("Vertex AI Vector Search not configured, skipping graph storage.")
+            logger.warning("Vertex AI Vector Search not configured, skipping graph storage.")
             return
         if not self.edges:
             return
 
-        model = aiplatform.TextEmbeddingModel.from_pretrained("text-embedding-004")
-        datapoints = []
-        for edge in self.edges:
-            embedding_text = repr(edge)
-            embedding = model.get_embeddings([embedding_text])[0].values
-            
-            restricts = [
-                {"namespace": "doc_id", "allow": [self.doc_id]},
-                {"namespace": "type", "allow": ["knowledge_graph_edge"]},
-                {"namespace": "edge_id", "allow": [edge.id]},
-                {"namespace": "source_node_id", "allow": [edge.source.id]},
-                {"namespace": "target_node_id", "allow": [edge.target.id]}
-            ]
-            datapoints.append({
-                "datapoint_id": f"{self.doc_id}_edge_{edge.id}",
-                "feature_vector": embedding,
-                "restricts": restricts
-            })
-    
-        if datapoints:
-            index_endpoint.upsert_datapoints(index=VERTEX_AI_INDEX_ID, datapoints=datapoints)
-            print(f"Upserted {len(datapoints)} graph relationships to Vertex AI for doc_id: {self.doc_id}")
+        try:
+            datapoints = []
+            for edge in self.edges:
+                embedding_text = repr(edge)
+                embedding = embedding_model.get_embeddings([embedding_text])[0].values
+                
+                restricts = [
+                    {"namespace": "doc_id", "allow": [self.doc_id]},
+                    {"namespace": "type", "allow": ["knowledge_graph_edge"]},
+                    {"namespace": "edge_id", "allow": [edge.id]},
+                    {"namespace": "source_node_id", "allow": [edge.source.id]},
+                    {"namespace": "target_node_id", "allow": [edge.target.id]}
+                ]
+                datapoints.append({
+                    "datapoint_id": f"{self.doc_id}_edge_{edge.id}",
+                    "feature_vector": embedding,
+                    "restricts": restricts
+                })
+        
+            if datapoints:
+                # Upsert in batches to avoid large requests
+                for i in range(0, len(datapoints), 100):
+                    batch = datapoints[i:i+100]
+                    index_endpoint.upsert_datapoints(index=VERTEX_AI_INDEX_ID, datapoints=batch)
+                logger.info(f"Upserted {len(datapoints)} graph relationships to Vertex AI for doc_id: {self.doc_id}")
+        except Exception as e:
+            logger.error(f"Failed to store graph relationships in Vertex AI for doc_id {self.doc_id}: {e}")
 
     def _build_adjacency_list(self):
         """Builds an adjacency list for efficient graph traversal."""
@@ -154,19 +172,63 @@ class KnowledgeGraph:
             self._adjacency_list[edge.source.id].append(edge)
             self._adjacency_list[edge.target.id].append(edge)
 
+    def expand_context_from_nodes(self, initial_node_ids: Set[str], depth: int = 2) -> str:
+        """
+        Recursively finds all connected edges from a set of starting nodes
+        up to a specified depth and returns their string representations.
+        """
+        if self._adjacency_list is None:
+            self._build_adjacency_list()
+
+        context_edges: Set[Edge] = set()
+        nodes_to_visit: Set[str] = set(initial_node_ids)
+        visited_nodes: Set[str] = set()
+
+        for i in range(depth):
+            if not nodes_to_visit:
+                break
+            
+            # Nodes to visit in the next level of the expansion
+            next_nodes_to_visit: Set[str] = set()
+            
+            # Mark the current nodes as visited
+            visited_nodes.update(nodes_to_visit)
+            
+            for node_id in nodes_to_visit:
+                # Find all edges connected to the current node
+                for edge in self._adjacency_list.get(node_id, []):
+                    context_edges.add(edge)
+                    # Add the neighbors to the set for the next level of traversal
+                    if edge.source.id not in visited_nodes:
+                        next_nodes_to_visit.add(edge.source.id)
+                    if edge.target.id not in visited_nodes:
+                        next_nodes_to_visit.add(edge.target.id)
+            
+            nodes_to_visit = next_nodes_to_visit
+
+        if not context_edges:
+            return "Could not expand context from the provided nodes."
+            
+        return "\n".join([repr(edge) for edge in context_edges])
+
     def query_and_expand(self, query: str, depth: int = 2, similarity_threshold: float = 0.7, num_neighbors: int = 5) -> str:
-        """Requirement 4: Queries the vector DB and recursively expands the context."""
-        if not index_endpoint:
+        """Queries the vector DB for relevant edges and expands the context."""
+        if not index_endpoint or not VERTEX_AI_DEPLOYED_INDEX_ID:
+            logger.warning("Vector search is not configured, cannot perform query_and_expand.")
             return "Vector search is not configured."
         if self._adjacency_list is None:
             self._build_adjacency_list()
 
-        # 1. Query Vertex AI to find the most similar edge(s)
-        response = index_endpoint.find_neighbors(
-            queries=[query],
-            deployed_index_id=os.getenv("VERTEX_AI_DEPLOYED_INDEX_ID"), # Assumes a deployed index ID is in env
-            num_neighbors=num_neighbors
-        )
+        try:
+            # 1. Query Vertex AI to find the most similar edge(s)
+            response = index_endpoint.find_neighbors(
+                queries=[query],
+                deployed_index_id=VERTEX_AI_DEPLOYED_INDEX_ID,
+                num_neighbors=num_neighbors
+            )
+        except Exception as e:
+            logger.error(f"Vertex AI find_neighbors call failed: {e}")
+            return "Error querying the vector database."
 
         # 2. Gather initial nodes from relevant edges
         initial_node_ids: Set[str] = set()
@@ -177,32 +239,15 @@ class KnowledgeGraph:
 
         for match in response[0]:
             if match.distance >= similarity_threshold:
+                # ID format is assumed to be "{doc_id}_edge_{edge.id}"
                 edge_id = match.id.split('_edge_')[-1]
                 edge = retrieved_edges.get(edge_id)
                 if edge:
                     initial_node_ids.add(edge.source.id)
                     initial_node_ids.add(edge.target.id)
-
-        # 3. Recursively find all connected edges up to the specified depth
-        context_edges: Set[Edge] = set()
-        nodes_to_visit: Set[str] = initial_node_ids
         
-        for i in range(depth):
-            if not nodes_to_visit:
-                break
-            
-            next_nodes_to_visit: Set[str] = set()
-            for node_id in nodes_to_visit:
-                for edge in self._adjacency_list.get(node_id, []):
-                    context_edges.add(edge)
-                    next_nodes_to_visit.add(edge.source.id)
-                    next_nodes_to_visit.add(edge.target.id)
-            
-            nodes_to_visit = next_nodes_to_visit - initial_node_ids
-            initial_node_ids.update(nodes_to_visit)
+        if not initial_node_ids:
+            return "Found potential matches but could not identify initial nodes for context expansion."
 
-        # 4. Return the combined context from all found edges
-        if not context_edges:
-            return "Found a potential match but could not expand context."
-            
-        return "\n".join([repr(edge) for edge in context_edges])
+        # 3. Recursively expand the context from these initial nodes
+        return self.expand_context_from_nodes(initial_node_ids, depth)

@@ -4,7 +4,7 @@ from sqlalchemy import text
 from google.cloud import aiplatform
 
 from .utils import sanitize_name
-from core.config import engine_mysql, index_endpoint, GCP_PROJECT_ID, GCP_REGION, VERTEX_AI_INDEX_ID
+from core.config import engine_mysql, index_endpoint, embedding_model, VERTEX_AI_INDEX_ID
 
 def store_tables_in_mysql(doc_id: str, filename: str, tables: List[Dict]):
     """Dynamically creates a database per document and populates tables in it."""
@@ -28,7 +28,6 @@ def store_tables_in_mysql(doc_id: str, filename: str, tables: List[Dict]):
             # Now, proceed with table creation within this database
             for i, table_data in enumerate(tables):
                 # Sanitize names for SQL
-                clean_doc_id = sanitize_name(doc_id)
                 page_no = table_data.get('page_no', 'unknown')
                 page_str = f"p{page_no}" if isinstance(page_no, int) else f"p{page_no[0]}"
                 # Table name is now simpler as it's inside a document-specific DB
@@ -66,10 +65,9 @@ def store_paragraphs_in_vertex_ai(doc_id: str, filename: str, paragraphs: List[D
     if not paragraphs:
         return
 
-    model = aiplatform.TextEmbeddingModel.from_pretrained("text-embedding-004")
     datapoints = []
     for i, para_data in enumerate(paragraphs):
-        embedding = model.get_embeddings([para_data["text"]])[0].values
+        embedding = embedding_model.get_embeddings([para_data["text"]])[0].values
         restricts = [
             {"namespace": "doc_id", "allow": [doc_id]},
             {"namespace": "filename", "allow": [filename]},

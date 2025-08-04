@@ -21,7 +21,7 @@ async def upload_document_endpoint(
     db: Session = Depends(get_db)
 ):
     if not file.filename.lower().endswith('.pdf'):
-        raise HTTPException(status_code=400, detail="Only PDF files are supported.")
+        raise HTTPException(status_code=400, detail="Only PDF files are supported as of now.")
     
     doc_id = str(uuid.uuid4())
     file_path = os.path.join(UPLOAD_DIR, f"{doc_id}_{file.filename}")
@@ -42,4 +42,4 @@ async def upload_document_endpoint(
         filename=file.filename, upload_dir=UPLOAD_DIR, chunk_dir=CHUNK_DIR
     ))
     
-    return db_document
+    return db_document  
