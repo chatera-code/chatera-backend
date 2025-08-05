@@ -27,6 +27,8 @@ try:
     
     embedding_model = TextEmbeddingModel.from_pretrained("text-embedding-004")
     logger.info("TextEmbeddingModel 'text-embedding-004' loaded successfully.")
+    generation_model = genai.GenerativeModel('models/gemini-1.5-pro-latest')
+    logger.info("GenerationModel 'gemini-1.5-pro-latest' loaded successfully.")
 
 
 except ValueError as e:
@@ -77,6 +79,7 @@ VERTEX_AI_INDEX_ID = os.getenv("VERTEX_AI_INDEX_ID")
 VERTEX_AI_INDEX_ENDPOINT_ID = os.getenv("VERTEX_AI_INDEX_ENDPOINT_ID") 
 VERTEX_AI_DEPLOYED_INDEX_ID = os.getenv("VERTEX_AI_DEPLOYED_INDEX_ID") # This is needed for querying, not initialization
 index_endpoint = None
+vertex_ai_index = None
 
 if VERTEX_AI_INDEX_ID and VERTEX_AI_INDEX_ENDPOINT_ID:
     try:
@@ -84,6 +87,9 @@ if VERTEX_AI_INDEX_ID and VERTEX_AI_INDEX_ENDPOINT_ID:
         index_endpoint = aiplatform.MatchingEngineIndexEndpoint(
             index_endpoint_name=VERTEX_AI_INDEX_ENDPOINT_ID
         )
+        
+        # Object for WRITING (upsert_datapoints)
+        vertex_ai_index = aiplatform.MatchingEngineIndex(index_name=VERTEX_AI_INDEX_ID)
         logger.info(f"Successfully connected to Vertex AI Index Endpoint: {VERTEX_AI_INDEX_ENDPOINT_ID}")
     except Exception as e:
         logger.error(f"Failed to initialize Vertex AI Index Endpoint: {e}")

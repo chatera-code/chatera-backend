@@ -3,10 +3,11 @@ import os
 import pickle
 from typing import Dict, Any, Optional, List, Set
 from google.cloud import aiplatform
+from google.api_core.exceptions import ResourceExhausted
+import time
 import logging
-
-from .utils import sanitize_name
-from core.config import index_endpoint, embedding_model, VERTEX_AI_INDEX_ID, VERTEX_AI_DEPLOYED_INDEX_ID
+from .utils import sanitize_name, call_with_retry
+from core.config import index_endpoint, embedding_model, VERTEX_AI_INDEX_ID, VERTEX_AI_DEPLOYED_INDEX_ID, vertex_ai_index
 
 logger = logging.getLogger(__name__)
 
@@ -106,6 +107,7 @@ class KnowledgeGraph:
 
     def save(self, directory: str):
         """Saves the entire KnowledgeGraph object to a file."""
+        print(f"Saving knowledge graph for doc_id {self.doc_id} to {directory}")
         os.makedirs(directory, exist_ok=True)
         filepath = os.path.join(directory, f"{self.doc_id}.graph")
         try:
@@ -129,39 +131,61 @@ class KnowledgeGraph:
             logger.error(f"Failed to load knowledge graph for doc_id {doc_id}: {e}")
             return None
         
-    def store_in_vector_db(self):
+    async def store_in_vector_db(self):
         """Generates embeddings for all edges and stores them in Vertex AI."""
-        if not index_endpoint:
+        if not vertex_ai_index:
             logger.warning("Vertex AI Vector Search not configured, skipping graph storage.")
             return
         if not self.edges:
             return
 
         try:
+            # 1. Collect all edge representations into a single list for batching
+            texts_to_embed = [repr(edge) for edge in self.edges]
+            
+            # 2. Get all embeddings in a single, batched API call with retries
+            logger.info(f"Requesting embeddings for {len(texts_to_embed)} graph edges...")
+            
+            max_retries = 5
+            delay = 1.0
+            embeddings = []
+            for attempt in range(max_retries):
+                try:
+                    embeddings = embedding_model.get_embeddings(texts_to_embed)
+                    break # Success
+                except ResourceExhausted as e:
+                    if attempt < max_retries - 1:
+                        logger.warning(f"Quota exceeded. Retrying in {delay:.2f} seconds...")
+                        time.sleep(delay)
+                        delay *= 2
+                    else:
+                        logger.error("Max retries reached for embedding generation. Failing.")
+                        raise e
+            
+            # 3. Prepare datapoints for upserting
             datapoints = []
-            for edge in self.edges:
-                embedding_text = repr(edge)
-                embedding = embedding_model.get_embeddings([embedding_text])[0].values
-                
+            for i, edge in enumerate(self.edges):
                 restricts = [
-                    {"namespace": "doc_id", "allow": [self.doc_id]},
-                    {"namespace": "type", "allow": ["knowledge_graph_edge"]},
-                    {"namespace": "edge_id", "allow": [edge.id]},
-                    {"namespace": "source_node_id", "allow": [edge.source.id]},
-                    {"namespace": "target_node_id", "allow": [edge.target.id]}
+                    {"namespace": "doc_id", "allow_list": [self.doc_id]},
+                    {"namespace": "type", "allow_list": ["knowledge_graph_edge"]},
+                    {"namespace": "edge_id", "allow_list": [edge.id]},
+                    {"namespace": "source_node_id", "allow_list": [edge.source.id]},
+                    {"namespace": "target_node_id", "allow_list": [edge.target.id]}
                 ]
                 datapoints.append({
                     "datapoint_id": f"{self.doc_id}_edge_{edge.id}",
-                    "feature_vector": embedding,
+                    "feature_vector": embeddings[i].values,
                     "restricts": restricts
                 })
-        
+                
+            #4. Upsert all datapoints in batches to avoid large requests
             if datapoints:
                 # Upsert in batches to avoid large requests
                 for i in range(0, len(datapoints), 100):
                     batch = datapoints[i:i+100]
-                    index_endpoint.upsert_datapoints(index=VERTEX_AI_INDEX_ID, datapoints=batch)
+                    vertex_ai_index.upsert_datapoints(index=VERTEX_AI_INDEX_ID, datapoints=batch)
                 logger.info(f"Upserted {len(datapoints)} graph relationships to Vertex AI for doc_id: {self.doc_id}")
+        
         except Exception as e:
             logger.error(f"Failed to store graph relationships in Vertex AI for doc_id {self.doc_id}: {e}")
 

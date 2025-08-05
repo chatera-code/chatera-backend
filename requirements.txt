@@ -7,3 +7,5 @@ google-cloud-aiplatform>=1.49.0
 cloud-sql-python-connector[pymysql]
 pypdf
 coloredlogs
+python-dotenv
+sse-starlette
