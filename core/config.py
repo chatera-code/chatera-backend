@@ -27,7 +27,7 @@ try:
     
     embedding_model = TextEmbeddingModel.from_pretrained("text-embedding-004")
     logger.info("TextEmbeddingModel 'text-embedding-004' loaded successfully.")
-    generation_model = genai.GenerativeModel('models/gemini-1.5-pro-latest')
+    generation_model = genai.GenerativeModel('models/gemini-2.5-flash')
     logger.info("GenerationModel 'gemini-1.5-pro-latest' loaded successfully.")
 
 

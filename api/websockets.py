@@ -31,7 +31,7 @@ class ConnectionManager:
     async def send_json(self, channel_id: str, data: dict):
         """Sends a JSON payload to a specific channel."""
         if channel_id in self.active_connections:
-            print(f"sending data {data} to channel: {channel_id}")
+            print(f"\nsending data {data} to channel: {channel_id}")
             await self.active_connections[channel_id].send_json(data)
 
 manager = ConnectionManager()

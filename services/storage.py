@@ -82,22 +82,26 @@ def store_tables_in_mysql(doc_id: str, filename: str, tables: List[Dict]):
     db_name_raw = os.path.splitext(filename)[0]
     # --- FIX: Sanitize AND truncate the name to MySQL's limit ---
     db_name = sanitize_name(db_name_raw)[:MAX_IDENTIFIER_LENGTH]
-
+    table_explanations = []
     with engine_mysql.connect() as connection:
         try:
             connection.execute(text(f"CREATE DATABASE IF NOT EXISTS `{db_name}`"))
             connection.execute(text(f"USE `{db_name}`"))
             for i, table_data in enumerate(tables):
                 # Table names should also be truncated
+                table_explanation = table_data.get("table_explanation", "")
+                if table_explanation:
+                    table_explanations.append(table_explanation)
                 page_no = table_data.get('page_no', 'unknown')
                 page_str = f"p{page_no}" if isinstance(page_no, int) else f"p{page_no[0]}"
                 table_name = f"table_{i+1}_{page_str}"[:MAX_IDENTIFIER_LENGTH]
+                table_name = table_data.get("table_name", table_name)
                 
                 columns = table_data.get("table_content", [])
                 if not columns: continue
                 create_stmt = f"CREATE TABLE IF NOT EXISTS `{table_name}` (id INT AUTO_INCREMENT PRIMARY KEY, "
                 # Column names should also be truncated
-                column_defs = [f"`{sanitize_name(c.get('column_name', f'col_{i}'))[:MAX_IDENTIFIER_LENGTH]}` TEXT" for c in columns]
+                column_defs = [f"`{c.get('column_name', f'col_{i}')[:MAX_IDENTIFIER_LENGTH]}` TEXT" for c in columns]
                 create_stmt += ", ".join(column_defs) + ");"
                 connection.execute(text(create_stmt))
                 max_rows = max(len(col.get("column_value", [])) for col in columns) if columns else 0
@@ -124,6 +128,7 @@ def store_tables_in_mysql(doc_id: str, filename: str, tables: List[Dict]):
                     connection.execute(text(insert_stmt))
             connection.commit()
             logger.info(f"Successfully stored {len(tables)} tables in MySQL database: {db_name}")
+            return table_explanations
         except Exception as e:
             logger.error(f"An error occurred during MySQL operations for database {db_name}: {e}", exc_info=True)
 

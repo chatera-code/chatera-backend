@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 from typing import List
 
 from core.database import get_db
-from core.models import Document
+from core.models import Document, DocumentListResponse
 from services.storage import delete_document_data
 
 router = APIRouter()
@@ -63,3 +63,14 @@ async def delete_documents(
         "failed_deletions": failed_deletions,
         "not_found_ids": not_found_ids
     }
+
+    
+@router.get("/documents", response_model=DocumentListResponse)
+def get_user_documents(clientId: str, db: Session = Depends(get_db)):
+    """Fetches a list of all documents a user has uploaded."""
+    docs = db.query(Document).filter(Document.client_id == clientId, Document.status == 'completed').all()
+    # docs = db.query(Document).filter(Document.client_id == clientId).all()
+    
+    doc_infos = [{"id": d.doc_id, "name": d.filename} for d in docs]
+    return {"documents": doc_infos}
+

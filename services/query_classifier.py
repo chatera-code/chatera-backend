@@ -2,6 +2,7 @@ import logging
 from typing import List
 import asyncio
 import google.generativeai as genai
+from core.config import generation_model
 
 logger = logging.getLogger(__name__)
 
@@ -36,8 +37,7 @@ async def classify_query(
     **Classification:**
     """
     try:
-        model = genai.GenerativeModel('models/gemini-1.5-pro-latest')
-        response = await asyncio.to_thread(model.generate_content, prompt)
+        response = await asyncio.to_thread(generation_model.generate_content, prompt)
         classification = response.text.strip()
         if classification not in ["TABLE_QUERY", "GENERAL_QUERY"]:
             logger.warning(f"Unexpected classification from LLM: '{classification}'. Defaulting to GENERAL_QUERY.")
@@ -45,5 +45,6 @@ async def classify_query(
         logger.info(f"Query '{new_user_query}' classified as: {classification}")
         return classification
     except Exception as e:
+        print(f"Error during query classification: {e}")
         logger.error(f"Error during query classification: {e}")
         return "GENERAL_QUERY"

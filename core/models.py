@@ -1,6 +1,6 @@
 import datetime
 from pydantic import BaseModel, Field
-from sqlalchemy import Column, String, JSON, DateTime, Boolean, ForeignKey, Text
+from sqlalchemy import Column, String, JSON, DateTime, Boolean, ForeignKey, Text, Integer
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import declarative_base
 from typing import List, Optional
@@ -17,7 +17,15 @@ class ChatSessionInfo(BaseModel):
     id: str
     title: str
     timestamp: datetime.datetime
-    isPinned: bool
+    # This tells Pydantic: "The JSON field will be named 'isPinned', 
+    # but it corresponds to the Python attribute 'is_pinned'."
+    is_pinned: bool = Field(alias='isPinned')
+
+    class Config:
+        # This allows Pydantic to read data from ORM objects (like SQLAlchemy)
+        from_attributes = True 
+        # This allows the use of aliases for both validation and serialization
+        populate_by_name = True
 
 class SessionListResponse(BaseModel):
     sessions: List[ChatSessionInfo]
@@ -32,6 +40,10 @@ class ChatHistoryResponse(BaseModel):
 class NewSessionResponse(BaseModel):
     newSession: ChatSessionInfo
 
+class UpdateSessionRequest(BaseModel):
+    title: Optional[str] = None
+    isPinned: Optional[bool] = None
+    
 class QueryResponse(BaseModel):
     response: ChatMessageInfo
 
@@ -70,10 +82,11 @@ class ChatSession(Base):
     __tablename__ = "chat_sessions"
     id = Column(String, primary_key=True, default=lambda: f"session_{uuid.uuid4().hex}")
     client_id = Column(String, index=True)
-    # --- CHANGE: Reverted to a static title column to store generated summaries ---
     title = Column(String, default="New Chat")
     timestamp = Column(DateTime, default=datetime.datetime.utcnow)
     is_pinned = Column(Boolean, default=False)
+    # --- FIX: New field to track when the title was last updated ---
+    title_updated_at_message_count = Column(Integer, default=0, nullable=False)
     messages = relationship("ChatMessage", back_populates="session", cascade="all, delete-orphan", order_by="ChatMessage.timestamp")
 
 class ChatMessage(Base):

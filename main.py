@@ -9,7 +9,7 @@ from fastapi import Request
 from fastapi.encoders import jsonable_encoder
 import traceback
 # V-- IMPORT 'chat' INSTEAD OF 'query' --V
-from api import upload, websockets, chat, document_management
+from api import upload, websockets, chat, document_management, session_management
 
 # Create FastAPI app instance
 app = FastAPI(title="Cloud-Native RAG App (Modular)")
@@ -46,6 +46,8 @@ app.include_router(upload.router, tags=["1. Ingestion"])
 # V-- INCLUDE THE 'chat' ROUTER --V
 app.include_router(chat.router, prefix="/api", tags=["2. Chat & Retrieval"])
 app.include_router(document_management.router, prefix="/api", tags=["3. Document Management"])
+app.include_router(session_management.router, prefix="/api", tags=["3. Session Management"])
+
 app.include_router(websockets.router, tags=["WebSockets"])
 
 @app.exception_handler(RequestValidationError)

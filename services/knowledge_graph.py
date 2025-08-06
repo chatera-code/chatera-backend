@@ -13,32 +13,34 @@ logger = logging.getLogger(__name__)
 
 class Node:
     """Represents a single node in the knowledge graph."""
-    def __init__(self, name: str, node_type: str, attributes: Dict[str, Any], page_no: Any):
+    def __init__(self, name: str, page_no: Any):
         # A deterministic ID based on type and name ensures nodes are unique
-        self.id: str = f"{node_type.lower()}_{sanitize_name(name).lower()}"
+        self.id = str(uuid.uuid4())
         self.name: str = name
-        self.type: str = node_type
-        self.attributes: Dict[str, Any] = attributes
+        self.edges = []
         self.page_no: Any = page_no
 
-    def __repr__(self) -> str:
-        return f"Node(id={self.id}, name='{self.name}', type='{self.type}')"
+    def add_edge(self, edge):
+        """Adds a connected edge to this node's record."""
+        self.edges.append(edge)
 
 class Edge:
     """Represents a directed edge (relationship) in the knowledge graph."""
-    def __init__(self, source: Node, target: Node, relation: str, comment: str, page_no: Any):
+    def __init__(self, source: Node, target: Node, relation: str, page_no: Any):
         self.id: str = str(uuid.uuid4())
         self.source = source
         self.target = target
         self.relation = relation
-        self.comment = comment
         self.page_no = page_no
 
-    def __repr__(self) -> str:
-        """Generates the string representation of the relationship for embedding."""
-        return (f"Fact: The entity '{self.source.name}' ({self.source.type}) {self.relation} "
-                f"the entity '{self.target.name}' ({self.target.type}). "
-                f"Supporting context: {self.comment}")
+    def __repr__(self):
+        # A more concise representation for the graph's __repr__ method.
+        return f"--[{self.relation}]--> {self.target.name}"
+    
+    def to_sentence(self):
+        """Converts the triplet into a natural language sentence."""
+        return f"{self.source.name} {self.relation} {self.target.name}."
+    
 
 class KnowledgeGraph:
     """Manages the collection of nodes, edges, and interaction with the vector DB."""
@@ -46,65 +48,65 @@ class KnowledgeGraph:
         self.doc_id = doc_id
         self.filename = filename
         self.nodes: Dict[str, Node] = {}
-        self.edges: List[Edge] = []
-        self._adjacency_list: Optional[Dict[str, List[Edge]]] = None
+        self.node_name_map = {}
+        self.edges: Dict[str, Edge] = {}
 
-    def __repr__(self) -> str:
-        """Generates a node-centric string representation of the graph."""
+    def __repr__(self):
+        """Provides a structured string representation of the entire graph."""
         if not self.nodes:
-            return "KnowledgeGraph is empty."
+            return "KnowledgeGraph(empty)"
         
-        output = ["Knowledge Graph Context:\n"]
-        if self._adjacency_list is None:
-            self._build_adjacency_list()
-
-        for node_id, node in self.nodes.items():
-            output.append(f"  - Node: {node.name} ({node.type}) [ID: {node.id}]")
-            connections = self._adjacency_list.get(node_id, [])
-            if connections:
-                for edge in connections:
-                    if edge.source.id == node_id:
-                        output.append(f"    - {edge.relation} -> {edge.target.name} ({edge.target.type})")
-                    else:
-                        output.append(f"    - is {edge.relation} of <- {edge.source.name} ({edge.source.type})")
-            else:
-                output.append("    - (No direct connections in this context)")
-        return "\n".join(output)
+        representation = "KnowledgeGraph:\n"
+        # Iterate through each node in the graph
+        for node in self.node_name_map.values():
+            # Check if there are any outgoing edges from this node
+            outgoing_edges = [edge for edge in node.edges if edge.source == node]
+            if outgoing_edges:
+                representation += f"  - Node: {node.name}\n"
+                for edge in outgoing_edges:
+                    representation += f"    {edge}\n"
+        return representation
     
-    def get_or_create_node(self, name: str, node_type: str, attributes: Dict[str, Any], page_no: Any) -> Node:
+    def get_or_create_node(self, name: str, page_no: Any) -> Node:
         """Adds a node if it's new, or returns the existing one."""
-        node_id = f"{node_type.lower()}_{sanitize_name(name).lower()}"
-        if node_id not in self.nodes:
-            self.nodes[node_id] = Node(name, node_type, attributes, page_no)
-        return self.nodes[node_id]
+        if name not in self.node_name_map:
+            node = Node(name, page_no)
+            self.nodes[node.id] = node
+            self.node_name_map[name] = node
+            
+        return self.node_name_map[name]
 
-    def add_relation(self, relation_data: Dict[str, Any], page_no: Any):
+    def add_relation(self, relation_data: Dict[str, Any]):
         """Adds an edge to the graph based on the extracted relation data."""
-        source_data = relation_data.get("source", {})
-        target_data = relation_data.get("target", {})
-        relation = relation_data.get("relation")
-        comment = relation_data.get("comment", "")
-
-        if not all([source_data.get("name"), target_data.get("name"), relation]):
+        source_name = relation_data.get("subject", "")
+        target_name = relation_data.get("object", "")
+        relation = relation_data.get("predicate", "")
+        page_no = relation_data.get("page_no", "unknown")
+        
+        if not all([source_name, target_name, relation]):
             return
 
         source_node = self.get_or_create_node(
-            name=source_data.get("name"), node_type=source_data.get("type", "Unknown"),
-            attributes=source_data.get("attributes", {}), page_no=page_no
+            name=source_name, page_no=page_no
         )
         target_node = self.get_or_create_node(
-            name=target_data.get("name"), node_type=target_data.get("type", "Unknown"),
-            attributes=target_data.get("attributes", {}), page_no=page_no
+            name=target_name, page_no=page_no
         )
         
-        edge = Edge(source_node, target_node, relation, comment, page_no)
-        self.edges.append(edge)
-        self._adjacency_list = None # Invalidate adjacency list
-
+        edge = Edge(source_node, target_node, relation, page_no)
+        self.edges[edge.id] = edge
+        
+        source_node.add_edge(edge)
+        target_node.add_edge(edge)
+        
     def get_node_by_id(self, node_id: str) -> Optional[Node]:
         """Retrieves a node from the graph by its unique ID."""
         return self.nodes.get(node_id)
 
+    def get_node_by_name(self, node_name: str) -> Optional[Node]:
+        """Retrieves a node from the graph by its name."""
+        return self.node_name_map.get(node_name)
+        
     def save(self, directory: str):
         """Saves the entire KnowledgeGraph object to a file."""
         print(f"Saving knowledge graph for doc_id {self.doc_id} to {directory}")
@@ -130,9 +132,66 @@ class KnowledgeGraph:
         except Exception as e:
             logger.error(f"Failed to load knowledge graph for doc_id {doc_id}: {e}")
             return None
+    
+    def get_context_from_nodes(self, nodes):
+        """
+        Retrieves all unique triplet sentences connected to a list of nodes.
+        """
+        context_triplets = set()
+        for node in nodes:
+            for edge in node.edges:
+                context_triplets.add(edge.to_sentence())
+        return list(context_triplets)
+    
+    def get_subgraph_context_from_edges(self, seed_edge_ids):
+        """
+        Traverses to depth 2 from seed edges and returns a structured string
+        representation of the resulting subgraph, suitable for LLM context.
+        """
+        # 1. Find the initial set of nodes connected by the seed edges.
+        nodes_to_expand = set()
+        for edge_id in seed_edge_ids:
+            if edge_id in self.edges:
+                edge = self.edges[edge_id]
+                nodes_to_expand.add(edge.source)
+                nodes_to_expand.add(edge.target)
+
+        # 2. Expand outwards twice (for depth 2)
+        all_subgraph_nodes = set(nodes_to_expand)
+        for _ in range(2): # Depth 1 and Depth 2 expansion
+            if not nodes_to_expand:
+                break
+            
+            current_expansion_set = set()
+            for node in nodes_to_expand:
+                for edge in node.edges:
+                    neighbor = edge.source if edge.target == node else edge.target
+                    if neighbor not in all_subgraph_nodes:
+                        current_expansion_set.add(neighbor)
+            
+            all_subgraph_nodes.update(current_expansion_set)
+            nodes_to_expand = current_expansion_set
+
+        # 3. Build the structured string representation from the subgraph.
+        representation = "Subgraph Context:\n"
+        sorted_subgraph_nodes = sorted(list(all_subgraph_nodes), key=lambda n: n.name)
+
+        for node in sorted_subgraph_nodes:
+            # Find outgoing edges where the target is also in our subgraph
+            outgoing_edges_in_subgraph = [
+                edge for edge in node.edges 
+                if edge.source == node and edge.target in all_subgraph_nodes
+            ]
+            if outgoing_edges_in_subgraph:
+                representation += f"  - Node: {node.name}\n"
+                for edge in sorted(outgoing_edges_in_subgraph, key=lambda e: e.relation):
+                    representation += f"    {edge}\n"
         
+        return representation if len(representation) > 18 else "Subgraph Context: No connected facts found."
+    
     async def store_in_vector_db(self):
         """Generates embeddings for all edges and stores them in Vertex AI."""
+        print("saving knowledge graph in vector db")
         if not vertex_ai_index:
             logger.warning("Vertex AI Vector Search not configured, skipping graph storage.")
             return
@@ -140,12 +199,10 @@ class KnowledgeGraph:
             return
 
         try:
-            # 1. Collect all edge representations into a single list for batching
-            texts_to_embed = [repr(edge) for edge in self.edges]
-            
+            texts_to_embed = [edge.to_sentence() for edge in self.edges.values()]
             # 2. Get all embeddings in a single, batched API call with retries
-            logger.info(f"Requesting embeddings for {len(texts_to_embed)} graph edges...")
-            
+            # logger.info(f"Requesting embeddings for {len(texts_to_embed)} graph edges...")
+            print(f"Requesting embeddings for {len(texts_to_embed)} graph edges...")
             max_retries = 5
             delay = 1.0
             embeddings = []
@@ -155,7 +212,8 @@ class KnowledgeGraph:
                     break # Success
                 except ResourceExhausted as e:
                     if attempt < max_retries - 1:
-                        logger.warning(f"Quota exceeded. Retrying in {delay:.2f} seconds...")
+                        # logger.warning(f"Quota exceeded. Retrying in {delay:.2f} seconds...")
+                        print(f"Quota exceeded. Retrying in {delay:.2f} seconds...")
                         time.sleep(delay)
                         delay *= 2
                     else:
@@ -164,16 +222,16 @@ class KnowledgeGraph:
             
             # 3. Prepare datapoints for upserting
             datapoints = []
-            for i, edge in enumerate(self.edges):
+            for i, (edge_id, edge) in enumerate(self.edges.items()):
                 restricts = [
                     {"namespace": "doc_id", "allow_list": [self.doc_id]},
                     {"namespace": "type", "allow_list": ["knowledge_graph_edge"]},
-                    {"namespace": "edge_id", "allow_list": [edge.id]},
+                    {"namespace": "edge_id", "allow_list": [edge_id]},
                     {"namespace": "source_node_id", "allow_list": [edge.source.id]},
                     {"namespace": "target_node_id", "allow_list": [edge.target.id]}
                 ]
                 datapoints.append({
-                    "datapoint_id": f"{self.doc_id}_edge_{edge.id}",
+                    "datapoint_id": f"{self.doc_id}_edge_{edge_id}",
                     "feature_vector": embeddings[i].values,
                     "restricts": restricts
                 })
@@ -183,95 +241,10 @@ class KnowledgeGraph:
                 # Upsert in batches to avoid large requests
                 for i in range(0, len(datapoints), 100):
                     batch = datapoints[i:i+100]
-                    vertex_ai_index.upsert_datapoints(index=VERTEX_AI_INDEX_ID, datapoints=batch)
+                    vertex_ai_index.upsert_datapoints(datapoints=batch)
                 logger.info(f"Upserted {len(datapoints)} graph relationships to Vertex AI for doc_id: {self.doc_id}")
         
         except Exception as e:
             logger.error(f"Failed to store graph relationships in Vertex AI for doc_id {self.doc_id}: {e}")
 
-    def _build_adjacency_list(self):
-        """Builds an adjacency list for efficient graph traversal."""
-        self._adjacency_list = {node_id: [] for node_id in self.nodes}
-        for edge in self.edges:
-            self._adjacency_list[edge.source.id].append(edge)
-            self._adjacency_list[edge.target.id].append(edge)
-
-    def expand_context_from_nodes(self, initial_node_ids: Set[str], depth: int = 2) -> str:
-        """
-        Recursively finds all connected edges from a set of starting nodes
-        up to a specified depth and returns their string representations.
-        """
-        if self._adjacency_list is None:
-            self._build_adjacency_list()
-
-        context_edges: Set[Edge] = set()
-        nodes_to_visit: Set[str] = set(initial_node_ids)
-        visited_nodes: Set[str] = set()
-
-        for i in range(depth):
-            if not nodes_to_visit:
-                break
-            
-            # Nodes to visit in the next level of the expansion
-            next_nodes_to_visit: Set[str] = set()
-            
-            # Mark the current nodes as visited
-            visited_nodes.update(nodes_to_visit)
-            
-            for node_id in nodes_to_visit:
-                # Find all edges connected to the current node
-                for edge in self._adjacency_list.get(node_id, []):
-                    context_edges.add(edge)
-                    # Add the neighbors to the set for the next level of traversal
-                    if edge.source.id not in visited_nodes:
-                        next_nodes_to_visit.add(edge.source.id)
-                    if edge.target.id not in visited_nodes:
-                        next_nodes_to_visit.add(edge.target.id)
-            
-            nodes_to_visit = next_nodes_to_visit
-
-        if not context_edges:
-            return "Could not expand context from the provided nodes."
-            
-        return "\n".join([repr(edge) for edge in context_edges])
-
-    def query_and_expand(self, query: str, depth: int = 2, similarity_threshold: float = 0.7, num_neighbors: int = 5) -> str:
-        """Queries the vector DB for relevant edges and expands the context."""
-        if not index_endpoint or not VERTEX_AI_DEPLOYED_INDEX_ID:
-            logger.warning("Vector search is not configured, cannot perform query_and_expand.")
-            return "Vector search is not configured."
-        if self._adjacency_list is None:
-            self._build_adjacency_list()
-
-        try:
-            # 1. Query Vertex AI to find the most similar edge(s)
-            response = index_endpoint.find_neighbors(
-                queries=[query],
-                deployed_index_id=VERTEX_AI_DEPLOYED_INDEX_ID,
-                num_neighbors=num_neighbors
-            )
-        except Exception as e:
-            logger.error(f"Vertex AI find_neighbors call failed: {e}")
-            return "Error querying the vector database."
-
-        # 2. Gather initial nodes from relevant edges
-        initial_node_ids: Set[str] = set()
-        retrieved_edges: Dict[str, Edge] = {edge.id: edge for edge in self.edges}
-        
-        if not response or not response[0]:
-            return "No relevant information found in the knowledge graph."
-
-        for match in response[0]:
-            if match.distance >= similarity_threshold:
-                # ID format is assumed to be "{doc_id}_edge_{edge.id}"
-                edge_id = match.id.split('_edge_')[-1]
-                edge = retrieved_edges.get(edge_id)
-                if edge:
-                    initial_node_ids.add(edge.source.id)
-                    initial_node_ids.add(edge.target.id)
-        
-        if not initial_node_ids:
-            return "Found potential matches but could not identify initial nodes for context expansion."
-
-        # 3. Recursively expand the context from these initial nodes
-        return self.expand_context_from_nodes(initial_node_ids, depth)
+    
