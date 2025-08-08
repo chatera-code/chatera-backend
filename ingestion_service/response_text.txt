@@ -1,0 +1,1841 @@
+```json
+{
+  "paragraphs": [
+    {
+      "page_no": 3,
+      "text": "The Afore BNT Series Three-phase string inverters, ranging from 30kW to 60kW, are meticulously designed for commercial and power plant PV system applications. All models feature anodized aluminum housings, which enhance durability and effectively prevent corrosion. The inclusion of external inductors further ensures efficient heat dissipation, significantly improving reliability and extending the inverters' lifespan. Users can interact with the inverter menu via sensor touch buttons, and communication is facilitated through a Wi-Fi module, which can be optionally changed to Ethernet or GPRS. System status can be conveniently monitored anytime and anywhere using an online portal or a dedicated mobile application (APP)."
+    },
+    {
+      "page_no": 6,
+      "text": "Eastman provides various contact points and presences globally. Their official website is www.eastmanworld.com, with marketing inquiries directed to marketing@eastmanworld.com. Key locations include AMPS MIDDLE EAST FZ LLC at #703, 7th Floor, Deira Twin Tower, Baniyas Square, Deira, Dubai (UAE); EASTMAN AUTO & POWER LTD. at ASF Towers, 249, Udyog Vihar Phase-4, Gurugram, Haryana-122016, India; and GUANGDONG EASTMAN NEW ENERGY CO., LTD at #1602, Meilan business centre, Intersection of Xixiang Avenue and Qianjin Second Road, Bao'an, District, Shenzhen-518102, China. Eastman also maintains a strong social media presence under the handles @eastman_world and @EastmanWorld."
+    }
+  ],
+  "tables": [
+    {
+      "page_no": 1,
+      "table_name": "eastman_on_grid_pv_inverter_three_phase_3_10_kw_specifications",
+      "table_content": [
+        {
+          "column_name": "models",
+          "column_value": [
+            "ES3KWT-GT",
+            "ES4KWT-GT",
+            "ES5KWT-GT",
+            "ES6KWT-GT",
+            "ES8KWT-GT",
+            "ES10KWT-GT"
+          ]
+        },
+        {
+          "column_name": "max_dc_power_w",
+          "column_value": [
+            "5100",
+            "6000",
+            "7500",
+            "9000",
+            "12000",
+            "15000"
+          ]
+        },
+        {
+          "column_name": "max_dc_voltage_v",
+          "column_value": [
+            "1100",
+            "1100",
+            "1100",
+            "1100",
+            "1100",
+            "1100"
+          ]
+        },
+        {
+          "column_name": "mppt_voltage_range_v",
+          "column_value": [
+            "150-1000",
+            "150-1000",
+            "150-1000",
+            "150-1000",
+            "150-1000",
+            "150-1000"
+          ]
+        },
+        {
+          "column_name": "mppt_full_power_voltage_range_v",
+          "column_value": [
+            "200-850",
+            "200-850",
+            "250-850",
+            "250-850",
+            "300-850",
+            "500-850"
+          ]
+        },
+        {
+          "column_name": "rated_input_voltage_v",
+          "column_value": [
+            "620",
+            "620",
+            "620",
+            "620",
+            "620",
+            "620"
+          ]
+        },
+        {
+          "column_name": "start_up_voltage_v",
+          "column_value": [
+            "150",
+            "150",
+            "150",
+            "150",
+            "150",
+            "150"
+          ]
+        },
+        {
+          "column_name": "max_input_current_a",
+          "column_value": [
+            "15 x 2",
+            "15 x 2",
+            "15 x 2",
+            "15 x 2",
+            "15 x 2",
+            "15 x 2"
+          ]
+        },
+        {
+          "column_name": "max_short_current_a",
+          "column_value": [
+            "25 x 2",
+            "25 x 2",
+            "25 x 2",
+            "25 x 2",
+            "25 x 2",
+            "25 x 2"
+          ]
+        },
+        {
+          "column_name": "num_mpp_tracker_num_pv_string",
+          "column_value": [
+            "2/2",
+            "2/2",
+            "2/2",
+            "2/2",
+            "2/2",
+            "2/2"
+          ]
+        },
+        {
+          "column_name": "input_connector_type",
+          "column_value": [
+            "MC4",
+            "MC4",
+            "MC4",
+            "MC4",
+            "MC4",
+            "MC4"
+          ]
+        },
+        {
+          "column_name": "max_output_power_va",
+          "column_value": [
+            "3300*",
+            "4400*",
+            "5500*",
+            "6600*",
+            "8800*",
+            "11000*"
+          ]
+        },
+        {
+          "column_name": "nominal_output_power_w",
+          "column_value": [
+            "3000",
+            "4000",
+            "5000",
+            "6000",
+            "8000",
+            "10000"
+          ]
+        },
+        {
+          "column_name": "max_output_current_a",
+          "column_value": [
+            "5.3",
+            "7",
+            "8.5",
+            "10.5",
+            "13.5",
+            "17"
+          ]
+        },
+        {
+          "column_name": "nominal_output_voltage_v",
+          "column_value": [
+            "3P+N+PE / 3P+PE 230/400",
+            "3P+N+PE / 3P+PE 230/400",
+            "3P+N+PE / 3P+PE 230/400",
+            "3P+N+PE / 3P+PE 230/400",
+            "3P+N+PE / 3P+PE 230/400",
+            "3P+N+PE / 3P+PE 230/400"
+          ]
+        },
+        {
+          "column_name": "grid_voltage_range",
+          "column_value": [
+            "260Vac-519Vac (according to local standard)",
+            "260Vac-519Vac (according to local standard)",
+            "260Vac-519Vac (according to local standard)",
+            "260Vac-519Vac (according to local standard)",
+            "260Vac-519Vac (according to local standard)",
+            "260Vac-519Vac (according to local standard)"
+          ]
+        },
+        {
+          "column_name": "nominal_output_frequency_hz",
+          "column_value": [
+            "50/60",
+            "50/60",
+            "50/60",
+            "50/60",
+            "50/60",
+            "50/60"
+          ]
+        },
+        {
+          "column_name": "grid_frequency_range",
+          "column_value": [
+            "45-55Hz/55-65Hz (according to local standard)",
+            "45-55Hz/55-65Hz (according to local standard)",
+            "45-55Hz/55-65Hz (according to local standard)",
+            "45-55Hz/55-65Hz (according to local standard)",
+            "45-55Hz/55-65Hz (according to local standard)",
+            "45-55Hz/55-65Hz (according to local standard)"
+          ]
+        },
+        {
+          "column_name": "output_power_factor",
+          "column_value": [
+            "1 default (adjustable from 0.8 leading to 0.8 lagging)",
+            "1 default (adjustable from 0.8 leading to 0.8 lagging)",
+            "1 default (adjustable from 0.8 leading to 0.8 lagging)",
+            "1 default (adjustable from 0.8 leading to 0.8 lagging)",
+            "1 default (adjustable from 0.8 leading to 0.8 lagging)",
+            "1 default (adjustable from 0.8 leading to 0.8 lagging)"
+          ]
+        },
+        {
+          "column_name": "output_current_thd",
+          "column_value": [
+            "<3%",
+            "<3%",
+            "<3%",
+            "<3%",
+            "<3%",
+            "<3%"
+          ]
+        },
+        {
+          "column_name": "max_efficiency",
+          "column_value": [
+            "98.30%",
+            "98.30%",
+            "98.30%",
+            "98.70%",
+            "98.70%",
+            "98.70%"
+          ]
+        },
+        {
+          "column_name": "euro_efficiency",
+          "column_value": [
+            "97.61%",
+            "97.65%",
+            "98.00%",
+            "98.05%",
+            "98.05%",
+            "98.23%"
+          ]
+        },
+        {
+          "column_name": "pv_reverse_polarity_protection",
+          "column_value": [
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES"
+          ]
+        },
+        {
+          "column_name": "pv_insulation_resistance_detection",
+          "column_value": [
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES"
+          ]
+        },
+        {
+          "column_name": "ac_short_circuit_protection",
+          "column_value": [
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES"
+          ]
+        },
+        {
+          "column_name": "ac_over_current_protection",
+          "column_value": [
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES"
+          ]
+        },
+        {
+          "column_name": "ac_over_voltage_protection",
+          "column_value": [
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES"
+          ]
+        },
+        {
+          "column_name": "anti_islanding_protection",
+          "column_value": [
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES"
+          ]
+        },
+        {
+          "column_name": "residual_current_detection",
+          "column_value": [
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES"
+          ]
+        },
+        {
+          "column_name": "over_temperature_protection",
+          "column_value": [
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES"
+          ]
+        },
+        {
+          "column_name": "integrated_dc_switch",
+          "column_value": [
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES"
+          ]
+        },
+        {
+          "column_name": "surge_protection",
+          "column_value": [
+            "Integrated (Type II)",
+            "Integrated (Type II)",
+            "Integrated (Type II)",
+            "Integrated (Type II)",
+            "Integrated (Type II)",
+            "Integrated (Type II)"
+          ]
+        },
+        {
+          "column_name": "smart_iv_curve_scanning",
+          "column_value": [
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES"
+          ]
+        },
+        {
+          "column_name": "quick_arc_fault_interruption",
+          "column_value": [
+            "Optional",
+            "Optional",
+            "Optional",
+            "Optional",
+            "Optional",
+            "Optional"
+          ]
+        },
+        {
+          "column_name": "dimensions_w_h_d_mm",
+          "column_value": [
+            "370 x 510 x 167",
+            "370 x 510 x 167",
+            "370 x 510 x 167",
+            "370 x 510 x 192",
+            "370 x 510 x 192",
+            "370 x 510 x 192"
+          ]
+        },
+        {
+          "column_name": "weight_kg",
+          "column_value": [
+            "16",
+            "16",
+            "16",
+            "16",
+            "16",
+            "16"
+          ]
+        },
+        {
+          "column_name": "protection_degree",
+          "column_value": [
+            "IP65",
+            "IP65",
+            "IP65",
+            "IP65",
+            "IP65",
+            "IP65"
+          ]
+        },
+        {
+          "column_name": "enclosure_material",
+          "column_value": [
+            "Aluminum",
+            "Aluminum",
+            "Aluminum",
+            "Aluminum",
+            "Aluminum",
+            "Aluminum"
+          ]
+        },
+        {
+          "column_name": "ambient_temperature_range_celsius",
+          "column_value": [
+            "-25 to 60",
+            "-25 to 60",
+            "-25 to 60",
+            "-25 to 60",
+            "-25 to 60",
+            "-25 to 60"
+          ]
+        },
+        {
+          "column_name": "humidity_range",
+          "column_value": [
+            "0-100%",
+            "0-100%",
+            "0-100%",
+            "0-100%",
+            "0-100%",
+            "0-100%"
+          ]
+        },
+        {
+          "column_name": "topology",
+          "column_value": [
+            "Transformerless",
+            "Transformerless",
+            "Transformerless",
+            "Transformerless",
+            "Transformerless",
+            "Transformerless"
+          ]
+        },
+        {
+          "column_name": "communication_interface",
+          "column_value": [
+            "RS485 / Wi-Fi / Wire Ethernet / GPRS (optional)",
+            "RS485 / Wi-Fi / Wire Ethernet / GPRS (optional)",
+            "RS485 / Wi-Fi / Wire Ethernet / GPRS (optional)",
+            "RS485 / Wi-Fi / Wire Ethernet / GPRS (optional)",
+            "RS485 / Wi-Fi / Wire Ethernet / GPRS (optional)",
+            "RS485 / Wi-Fi / Wire Ethernet / GPRS (optional)"
+          ]
+        },
+        {
+          "column_name": "cooling_concept",
+          "column_value": [
+            "Convection",
+            "Convection",
+            "Convection",
+            "Intelligent fan cooling",
+            "Intelligent fan cooling",
+            "Intelligent fan cooling"
+          ]
+        },
+        {
+          "column_name": "noise_emission_db",
+          "column_value": [
+            "<30",
+            "<30",
+            "<30",
+            "<30",
+            "<30",
+            "<30"
+          ]
+        },
+        {
+          "column_name": "night_power_consumption_w",
+          "column_value": [
+            "<1",
+            "<1",
+            "<1",
+            "<1",
+            "<1",
+            "<1"
+          ]
+        },
+        {
+          "column_name": "max_operation_altitude_m",
+          "column_value": [
+            "≤4000",
+            "≤4000",
+            "≤4000",
+            "≤4000",
+            "≤4000",
+            "≤4000"
+          ]
+        },
+        {
+          "column_name": "emc_standard",
+          "column_value": [
+            "EN/IEC 61000-6-2, EN/IEC 61000-6-3, EN61000-3-2, EN61000-3-3, EN61000-3-11, EN61000-3-12",
+            "EN/IEC 61000-6-2, EN/IEC 61000-6-3, EN61000-3-2, EN61000-3-3, EN61000-3-11, EN61000-3-12",
+            "EN/IEC 61000-6-2, EN/IEC 61000-6-3, EN61000-3-2, EN61000-3-3, EN61000-3-11, EN61000-3-12",
+            "EN/IEC 61000-6-2, EN/IEC 61000-6-3, EN61000-3-2, EN61000-3-3, EN61000-3-11, EN61000-3-12",
+            "EN/IEC 61000-6-2, EN/IEC 61000-6-3, EN61000-3-2, EN61000-3-3, EN61000-3-11, EN61000-3-12",
+            "EN/IEC 61000-6-2, EN/IEC 61000-6-3, EN61000-3-2, EN61000-3-3, EN61000-3-11, EN61000-3-12"
+          ]
+        },
+        {
+          "column_name": "safety_standard",
+          "column_value": [
+            "IEC 60068, UL1741, EN62109",
+            "IEC 60068, UL1741, EN62109",
+            "IEC 60068, UL1741, EN62109",
+            "IEC 60068, UL1741, EN62109",
+            "IEC 60068, UL1741, EN62109",
+            "IEC 60068, UL1741, EN62109"
+          ]
+        },
+        {
+          "column_name": "grid_connection_standard",
+          "column_value": [
+            "IEEE1547, CSA C22, EN50549, VDE4105, VDE0126, RD1699, ABNT NBR16149 & 16150, AS4777.2, NB/T32004, G98/G99, IEC61727",
+            "IEEE1547, CSA C22, EN50549, VDE4105, VDE0126, RD1699, ABNT NBR16149 & 16150, AS4777.2, NB/T32004, G98/G99, IEC61727",
+            "IEEE1547, CSA C22, EN50549, VDE4105, VDE0126, RD1699, ABNT NBR16149 & 16150, AS4777.2, NB/T32004, G98/G99, IEC61727",
+            "IEEE1547, CSA C22, EN50549, VDE4105, VDE0126, RD1699, ABNT NBR16149 & 16150, AS4777.2, NB/T32004, G98/G99, IEC61727",
+            "IEEE1547, CSA C22, EN50549, VDE4105, VDE0126, RD1699, ABNT NBR16149 & 16150, AS4777.2, NB/T32004, G98/G99, IEC61727",
+            "IEEE1547, CSA C22, EN50549, VDE4105, VDE0126, RD1699, ABNT NBR16149 & 16150, AS4777.2, NB/T32004, G98/G99, IEC61727"
+          ]
+        }
+      ],
+      "table_explanation": "This table provides detailed technical specifications for Eastman's On-Grid PV Inverter Three Phase models ranging from 3 kW to 10 kW. It covers PV input, AC output, efficiency, protection features, general physical and environmental data, and certifications. This data is crucial for selecting the appropriate inverter model based on system requirements and for ensuring compliance with international standards, serving as a primary data source for technical inquiries and product comparisons."
+    },
+    {
+      "page_no": 2,
+      "table_name": "eastman_on_grid_pv_inverter_three_phase_12_25_kw_specifications",
+      "table_content": [
+        {
+          "column_name": "models",
+          "column_value": [
+            "ES12KWT-GT",
+            "ES12KWT-GT",
+            "ES15KWT-GT",
+            "ES17KWT-GT",
+            "ES20KWT-GT",
+            "ES25KWT-GT"
+          ]
+        },
+        {
+          "column_name": "max_dc_power_w",
+          "column_value": [
+            "18000",
+            "19500",
+            "22500",
+            "25500",
+            "30000",
+            "37500"
+          ]
+        },
+        {
+          "column_name": "max_dc_voltage_v",
+          "column_value": [
+            "1100",
+            "1100",
+            "1100",
+            "1100",
+            "1100",
+            "1100"
+          ]
+        },
+        {
+          "column_name": "mppt_voltage_range_v",
+          "column_value": [
+            "150-1000",
+            "150-1000",
+            "150-1000",
+            "150-1000",
+            "150-1000",
+            "150-1000"
+          ]
+        },
+        {
+          "column_name": "mppt_full_power_voltage_range_v",
+          "column_value": [
+            "500-850",
+            "500-850",
+            "500-850",
+            "500-850",
+            "500-850",
+            "500-850"
+          ]
+        },
+        {
+          "column_name": "rated_input_voltage_v",
+          "column_value": [
+            "620",
+            "620",
+            "620",
+            "620",
+            "620",
+            "620"
+          ]
+        },
+        {
+          "column_name": "start_up_voltage_v",
+          "column_value": [
+            "150",
+            "150",
+            "150",
+            "150",
+            "150",
+            "150"
+          ]
+        },
+        {
+          "column_name": "max_input_current_a",
+          "column_value": [
+            "15 x 2",
+            "15 x 2",
+            "20 + 32",
+            "20 + 32",
+            "32 x 2",
+            "32 x 2"
+          ]
+        },
+        {
+          "column_name": "max_short_current_a",
+          "column_value": [
+            "25 x 2",
+            "25 x 2",
+            "30 + 48",
+            "30 + 48",
+            "48 x 2",
+            "48 x 2"
+          ]
+        },
+        {
+          "column_name": "num_mpp_tracker_num_pv_string",
+          "column_value": [
+            "2/2",
+            "2/2",
+            "2/3",
+            "2/3",
+            "2/4",
+            "2/4"
+          ]
+        },
+        {
+          "column_name": "input_connector_type",
+          "column_value": [
+            "MC4",
+            "MC4",
+            "MC4",
+            "MC4",
+            "MC4",
+            "MC4"
+          ]
+        },
+        {
+          "column_name": "max_output_power_va",
+          "column_value": [
+            "13200*",
+            "14300*",
+            "16500*",
+            "18700*",
+            "22000*",
+            "27500*"
+          ]
+        },
+        {
+          "column_name": "nominal_output_power_w",
+          "column_value": [
+            "12000",
+            "13000",
+            "15000",
+            "17000",
+            "20000",
+            "25000"
+          ]
+        },
+        {
+          "column_name": "max_output_current_a",
+          "column_value": [
+            "21.5",
+            "22",
+            "27",
+            "30",
+            "32",
+            "40"
+          ]
+        },
+        {
+          "column_name": "nominal_output_voltage_v",
+          "column_value": [
+            "3P+N+PE / 3P+PE 230/400",
+            "3P+N+PE / 3P+PE 230/400",
+            "3P+N+PE / 3P+PE 230/400",
+            "3P+N+PE / 3P+PE 230/400",
+            "3P+N+PE / 3P+PE 230/400",
+            "3P+N+PE / 3P+PE 230/400"
+          ]
+        },
+        {
+          "column_name": "grid_voltage_range",
+          "column_value": [
+            "260Vac-519Vac (according to local standard)",
+            "260Vac-519Vac (according to local standard)",
+            "260Vac-519Vac (according to local standard)",
+            "260Vac-519Vac (according to local standard)",
+            "260Vac-519Vac (according to local standard)",
+            "260Vac-519Vac (according to local standard)"
+          ]
+        },
+        {
+          "column_name": "nominal_output_frequency_hz",
+          "column_value": [
+            "50/60",
+            "50/60",
+            "50/60",
+            "50/60",
+            "50/60",
+            "50/60"
+          ]
+        },
+        {
+          "column_name": "grid_frequency_range",
+          "column_value": [
+            "45-55Hz/55-65Hz (according to local standard)",
+            "45-55Hz/55-65Hz (according to local standard)",
+            "45-55Hz/55-65Hz (according to local standard)",
+            "45-55Hz/55-65Hz (according to local standard)",
+            "45-55Hz/55-65Hz (according to local standard)",
+            "45-55Hz/55-65Hz (according to local standard)"
+          ]
+        },
+        {
+          "column_name": "output_power_factor",
+          "column_value": [
+            "1 default (adjustable from 0.8 leading to 0.8 lagging)",
+            "1 default (adjustable from 0.8 leading to 0.8 lagging)",
+            "1 default (adjustable from 0.8 leading to 0.8 lagging)",
+            "1 default (adjustable from 0.8 leading to 0.8 lagging)",
+            "1 default (adjustable from 0.8 leading to 0.8 lagging)",
+            "1 default (adjustable from 0.8 leading to 0.8 lagging)"
+          ]
+        },
+        {
+          "column_name": "output_current_thd",
+          "column_value": [
+            "<3%",
+            "<3%",
+            "<3%",
+            "<3%",
+            "<3%",
+            "<3%"
+          ]
+        },
+        {
+          "column_name": "max_efficiency",
+          "column_value": [
+            "98.70%",
+            "98.70%",
+            "98.70%",
+            "98.70%",
+            "98.75%",
+            "98.75%"
+          ]
+        },
+        {
+          "column_name": "euro_efficiency",
+          "column_value": [
+            "98.23%",
+            "98.23%",
+            "98.23%",
+            "98.23%",
+            "98.35%",
+            "98.35%"
+          ]
+        },
+        {
+          "column_name": "pv_reverse_polarity_protection",
+          "column_value": [
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES"
+          ]
+        },
+        {
+          "column_name": "pv_insulation_resistance_detection",
+          "column_value": [
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES"
+          ]
+        },
+        {
+          "column_name": "ac_short_circuit_protection",
+          "column_value": [
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES"
+          ]
+        },
+        {
+          "column_name": "ac_over_current_protection",
+          "column_value": [
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES"
+          ]
+        },
+        {
+          "column_name": "ac_over_voltage_protection",
+          "column_value": [
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES"
+          ]
+        },
+        {
+          "column_name": "anti_islanding_protection",
+          "column_value": [
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES"
+          ]
+        },
+        {
+          "column_name": "residual_current_detection",
+          "column_value": [
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES"
+          ]
+        },
+        {
+          "column_name": "over_temperature_protection",
+          "column_value": [
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES"
+          ]
+        },
+        {
+          "column_name": "integrated_dc_switch",
+          "column_value": [
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES"
+          ]
+        },
+        {
+          "column_name": "surge_protection",
+          "column_value": [
+            "Integrated (Type II)",
+            "Integrated (Type II)",
+            "Integrated (Type II)",
+            "Integrated (Type II)",
+            "Integrated (Type II)",
+            "Integrated (Type II)"
+          ]
+        },
+        {
+          "column_name": "smart_iv_curve_scanning",
+          "column_value": [
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES"
+          ]
+        },
+        {
+          "column_name": "quick_arc_fault_interruption",
+          "column_value": [
+            "Optional",
+            "Optional",
+            "Optional",
+            "Optional",
+            "Optional",
+            "Optional"
+          ]
+        },
+        {
+          "column_name": "dimensions_w_h_d_mm",
+          "column_value": [
+            "370 x 510 x 192",
+            "370 x 510 x 192",
+            "370 x 510 x 192",
+            "370 x 510 x 192",
+            "370 x 535 x 192",
+            "370 x 535 x 192"
+          ]
+        },
+        {
+          "column_name": "weight_kg",
+          "column_value": [
+            "16",
+            "16",
+            "17",
+            "17",
+            "19",
+            "19"
+          ]
+        },
+        {
+          "column_name": "protection_degree",
+          "column_value": [
+            "IP65",
+            "IP65",
+            "IP65",
+            "IP65",
+            "IP65",
+            "IP65"
+          ]
+        },
+        {
+          "column_name": "enclosure_material",
+          "column_value": [
+            "Aluminum",
+            "Aluminum",
+            "Aluminum",
+            "Aluminum",
+            "Aluminum",
+            "Aluminum"
+          ]
+        },
+        {
+          "column_name": "ambient_temperature_range_celsius",
+          "column_value": [
+            "-25 to 60",
+            "-25 to 60",
+            "-25 to 60",
+            "-25 to 60",
+            "-25 to 60",
+            "-25 to 60"
+          ]
+        },
+        {
+          "column_name": "humidity_range",
+          "column_value": [
+            "0-100%",
+            "0-100%",
+            "0-100%",
+            "0-100%",
+            "0-100%",
+            "0-100%"
+          ]
+        },
+        {
+          "column_name": "topology",
+          "column_value": [
+            "Transformerless",
+            "Transformerless",
+            "Transformerless",
+            "Transformerless",
+            "Transformerless",
+            "Transformerless"
+          ]
+        },
+        {
+          "column_name": "communication_interface",
+          "column_value": [
+            "RS485 / Wi-Fi / Wire Ethernet / GPRS (optional)",
+            "RS485 / Wi-Fi / Wire Ethernet / GPRS (optional)",
+            "RS485 / Wi-Fi / Wire Ethernet / GPRS (optional)",
+            "RS485 / Wi-Fi / Wire Ethernet / GPRS (optional)",
+            "RS485 / Wi-Fi / Wire Ethernet / GPRS (optional)",
+            "RS485 / Wi-Fi / Wire Ethernet / GPRS (optional)"
+          ]
+        },
+        {
+          "column_name": "cooling_concept",
+          "column_value": [
+            "Intelligent fan cooling",
+            "Intelligent fan cooling",
+            "Intelligent fan cooling",
+            "Intelligent fan cooling",
+            "Intelligent fan cooling",
+            "Intelligent fan cooling"
+          ]
+        },
+        {
+          "column_name": "noise_emission_db",
+          "column_value": [
+            "<40",
+            "<40",
+            "<40",
+            "<40",
+            "<51",
+            "<51"
+          ]
+        },
+        {
+          "column_name": "night_power_consumption_w",
+          "column_value": [
+            "<1",
+            "<1",
+            "<1",
+            "<1",
+            "<1",
+            "<1"
+          ]
+        },
+        {
+          "column_name": "max_operation_altitude_m",
+          "column_value": [
+            "≤4000",
+            "≤4000",
+            "≤4000",
+            "≤4000",
+            "≤4000",
+            "≤4000"
+          ]
+        },
+        {
+          "column_name": "emc_standard",
+          "column_value": [
+            "EN/IEC 61000-6-2, EN/IEC 61000-6-3, EN61000-3-2, EN61000-3-3, EN61000-3-11, EN61000-3-12",
+            "EN/IEC 61000-6-2, EN/IEC 61000-6-3, EN61000-3-2, EN61000-3-3, EN61000-3-11, EN61000-3-12",
+            "EN/IEC 61000-6-2, EN/IEC 61000-6-3, EN61000-3-2, EN61000-3-3, EN61000-3-11, EN61000-3-12",
+            "EN/IEC 61000-6-2, EN/IEC 61000-6-3, EN61000-3-2, EN61000-3-3, EN61000-3-11, EN61000-3-12",
+            "EN/IEC 61000-6-2, EN/IEC 61000-6-3, EN61000-3-2, EN61000-3-3, EN61000-3-11, EN61000-3-12",
+            "EN/IEC 61000-6-2, EN/IEC 61000-6-3, EN61000-3-2, EN61000-3-3, EN61000-3-11, EN61000-3-12"
+          ]
+        },
+        {
+          "column_name": "safety_standard",
+          "column_value": [
+            "IEC 60068, UL1741, EN62109",
+            "IEC 60068, UL1741, EN62109",
+            "IEC 60068, UL1741, EN62109",
+            "IEC 60068, UL1741, EN62109",
+            "IEC 60068, UL1741, EN62109",
+            "IEC 60068, UL1741, EN62109"
+          ]
+        },
+        {
+          "column_name": "grid_connection_standard",
+          "column_value": [
+            "IEEE1547, CSA C22, EN50549, VDE4105, VDE0126, RD1699, ABNT NBR16149 & 16150, AS4777.2, NB/T32004, G98/G99, IEC61727",
+            "IEEE1547, CSA C22, EN50549, VDE4105, VDE0126, RD1699, ABNT NBR16149 & 16150, AS4777.2, NB/T32004, G98/G99, IEC61727",
+            "IEEE1547, CSA C22, EN50549, VDE4105, VDE0126, RD1699, ABNT NBR16149 & 16150, AS4777.2, NB/T32004, G98/G99, IEC61727",
+            "IEEE1547, CSA C22, EN50549, VDE4105, VDE0126, RD1699, ABNT NBR16149 & 16150, AS4777.2, NB/T32004, G98/G99, IEC61727",
+            "IEEE1547, CSA C22, EN50549, VDE4105, VDE0126, RD1699, ABNT NBR16149 & 16150, AS4777.2, NB/T32004, G98/G99, IEC61727",
+            "IEEE1547, CSA C22, EN50549, VDE4105, VDE0126, RD1699, ABNT NBR16149 & 16150, AS4777.2, NB/T32004, G98/G99, IEC61727"
+          ]
+        }
+      ],
+      "table_explanation": "This table presents detailed technical specifications for Eastman's On-Grid PV Inverter Three Phase models ranging from 12 kW to 25 kW. It provides critical information on PV input, AC output, efficiency, various protection mechanisms, environmental ratings, and compliance standards. This comprehensive data is essential for assessing inverter performance in higher power residential or small commercial applications, facilitating accurate system design and regulatory adherence."
+    },
+    {
+      "page_no": 5,
+      "table_name": "eastman_on_grid_pv_inverter_three_phase_30_60_kw_specifications",
+      "table_content": [
+        {
+          "column_name": "models",
+          "column_value": [
+            "ES30KWT-GT",
+            "ES36KWT-GT",
+            "ES40KWT-GT",
+            "ES50KWT-GT",
+            "ES60KWT-GT"
+          ]
+        },
+        {
+          "column_name": "max_dc_power_w",
+          "column_value": [
+            "45000",
+            "54000",
+            "60000",
+            "75000",
+            "90000"
+          ]
+        },
+        {
+          "column_name": "max_dc_voltage_v",
+          "column_value": [
+            "1100",
+            "1100",
+            "1100",
+            "1100",
+            "1100"
+          ]
+        },
+        {
+          "column_name": "mppt_voltage_range_v",
+          "column_value": [
+            "200-1000",
+            "200-1000",
+            "200-1000",
+            "200-1000",
+            "200-1000"
+          ]
+        },
+        {
+          "column_name": "mppt_full_power_voltage_range_v",
+          "column_value": [
+            "500-850",
+            "500-850",
+            "500-850",
+            "500-850",
+            "500-850"
+          ]
+        },
+        {
+          "column_name": "rated_input_voltage_v",
+          "column_value": [
+            "620",
+            "620",
+            "620",
+            "620",
+            "620"
+          ]
+        },
+        {
+          "column_name": "start_up_voltage_v",
+          "column_value": [
+            "200",
+            "200",
+            "200",
+            "200",
+            "200"
+          ]
+        },
+        {
+          "column_name": "max_input_current_a",
+          "column_value": [
+            "38x2",
+            "38x3",
+            "40x3",
+            "40x3",
+            "38x4"
+          ]
+        },
+        {
+          "column_name": "max_short_current_a",
+          "column_value": [
+            "48x2",
+            "48x3",
+            "48x3",
+            "48x3",
+            "48x4"
+          ]
+        },
+        {
+          "column_name": "num_mpp_tracker_num_pv_string",
+          "column_value": [
+            "2/5",
+            "3/6",
+            "3/7",
+            "3/7",
+            "4/8"
+          ]
+        },
+        {
+          "column_name": "input_connector_type",
+          "column_value": [
+            "MC4",
+            "MC4",
+            "MC4",
+            "MC4",
+            "MC4"
+          ]
+        },
+        {
+          "column_name": "max_output_power_va",
+          "column_value": [
+            "33000*",
+            "39600*",
+            "44000*",
+            "55000*",
+            "66000*"
+          ]
+        },
+        {
+          "column_name": "nominal_output_power_w",
+          "column_value": [
+            "30000",
+            "36000",
+            "40000",
+            "50000",
+            "60000"
+          ]
+        },
+        {
+          "column_name": "max_output_current_a",
+          "column_value": [
+            "48",
+            "60",
+            "65",
+            "80",
+            "96"
+          ]
+        },
+        {
+          "column_name": "nominal_output_voltage_v",
+          "column_value": [
+            "3P+N+PE / 3P+PE 230/400",
+            "3P+N+PE / 3P+PE 230/400",
+            "3P+N+PE / 3P+PE 230/400",
+            "3P+N+PE / 3P+PE 230/400",
+            "3P+N+PE / 3P+PE 230/400"
+          ]
+        },
+        {
+          "column_name": "grid_voltage_range",
+          "column_value": [
+            "260Vac-519Vac (according to local standard)",
+            "260Vac-519Vac (according to local standard)",
+            "260Vac-519Vac (according to local standard)",
+            "260Vac-519Vac (according to local standard)",
+            "260Vac-519Vac (according to local standard)"
+          ]
+        },
+        {
+          "column_name": "nominal_output_frequency_hz",
+          "column_value": [
+            "50/60",
+            "50/60",
+            "50/60",
+            "50/60",
+            "50/60"
+          ]
+        },
+        {
+          "column_name": "grid_frequency_range",
+          "column_value": [
+            "45-55Hz/55-65Hz (according to local standard)",
+            "45-55Hz/55-65Hz (according to local standard)",
+            "45-55Hz/55-65Hz (according to local standard)",
+            "45-55Hz/55-65Hz (according to local standard)",
+            "45-55Hz/55-65Hz (according to local standard)"
+          ]
+        },
+        {
+          "column_name": "output_power_factor",
+          "column_value": [
+            "1 default (adjustable from 0.8 leading to 0.8 lagging)",
+            "1 default (adjustable from 0.8 leading to 0.8 lagging)",
+            "1 default (adjustable from 0.8 leading to 0.8 lagging)",
+            "1 default (adjustable from 0.8 leading to 0.8 lagging)",
+            "1 default (adjustable from 0.8 leading to 0.8 lagging)"
+          ]
+        },
+        {
+          "column_name": "output_current_thd",
+          "column_value": [
+            "<3%",
+            "<3%",
+            "<3%",
+            "<3%",
+            "<3%"
+          ]
+        },
+        {
+          "column_name": "max_efficiency",
+          "column_value": [
+            "98.50%",
+            "98.65%",
+            "98.65%",
+            "98.80%",
+            "99.00%"
+          ]
+        },
+        {
+          "column_name": "euro_efficiency",
+          "column_value": [
+            "98.10%",
+            "98.20%",
+            "98.25%",
+            "98.45%",
+            "98.50%"
+          ]
+        },
+        {
+          "column_name": "pv_reverse_polarity_protection",
+          "column_value": [
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES"
+          ]
+        },
+        {
+          "column_name": "pv_insulation_resistance_detection",
+          "column_value": [
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES"
+          ]
+        },
+        {
+          "column_name": "ac_short_circuit_protection",
+          "column_value": [
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES"
+          ]
+        },
+        {
+          "column_name": "ac_over_current_protection",
+          "column_value": [
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES"
+          ]
+        },
+        {
+          "column_name": "ac_over_voltage_protection",
+          "column_value": [
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES"
+          ]
+        },
+        {
+          "column_name": "anti_islanding_protection",
+          "column_value": [
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES"
+          ]
+        },
+        {
+          "column_name": "residual_current_detection",
+          "column_value": [
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES"
+          ]
+        },
+        {
+          "column_name": "over_temperature_protection",
+          "column_value": [
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES"
+          ]
+        },
+        {
+          "column_name": "integrated_dc_switch",
+          "column_value": [
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES"
+          ]
+        },
+        {
+          "column_name": "surge_protection",
+          "column_value": [
+            "Integrated (Type II)",
+            "Integrated (Type II)",
+            "Integrated (Type II)",
+            "Integrated (Type II)",
+            "Integrated (Type II)"
+          ]
+        },
+        {
+          "column_name": "smart_iv_curve_scanning",
+          "column_value": [
+            "YES",
+            "YES",
+            "YES",
+            "YES",
+            "YES"
+          ]
+        },
+        {
+          "column_name": "quick_arc_fault_interruption",
+          "column_value": [
+            "Optional",
+            "Optional",
+            "Optional",
+            "Optional",
+            "Optional"
+          ]
+        },
+        {
+          "column_name": "dimensions_w_h_d_mm",
+          "column_value": [
+            "450 x 485 x 210",
+            "450 x 485 x 210",
+            "710 x 470 x 236",
+            "710 x 470 x 236",
+            "710 x 470 x 236"
+          ]
+        },
+        {
+          "column_name": "weight_kg",
+          "column_value": [
+            "26",
+            "26",
+            "44",
+            "51",
+            "51"
+          ]
+        },
+        {
+          "column_name": "protection_degree",
+          "column_value": [
+            "IP65",
+            "IP65",
+            "IP65",
+            "IP65",
+            "IP65"
+          ]
+        },
+        {
+          "column_name": "enclosure_material",
+          "column_value": [
+            "Aluminum",
+            "Aluminum",
+            "Aluminum",
+            "Aluminum",
+            "Aluminum"
+          ]
+        },
+        {
+          "column_name": "ambient_temperature_range_celsius",
+          "column_value": [
+            "-25 to 60",
+            "-25 to 60",
+            "-25 to 60",
+            "-25 to 60",
+            "-25 to 60"
+          ]
+        },
+        {
+          "column_name": "humidity_range",
+          "column_value": [
+            "0-100%",
+            "0-100%",
+            "0-100%",
+            "0-100%",
+            "0-100%"
+          ]
+        },
+        {
+          "column_name": "topology",
+          "column_value": [
+            "Transformerless",
+            "Transformerless",
+            "Transformerless",
+            "Transformerless",
+            "Transformerless"
+          ]
+        },
+        {
+          "column_name": "communication_interface",
+          "column_value": [
+            "RS485 / Wi-Fi / Wire Ethernet / GPRS (optional)",
+            "RS485 / Wi-Fi / Wire Ethernet / GPRS (optional)",
+            "RS485 / Wi-Fi / Wire Ethernet / GPRS (optional)",
+            "RS485 / Wi-Fi / Wire Ethernet / GPRS (optional)",
+            "RS485 / Wi-Fi / Wire Ethernet / GPRS (optional)"
+          ]
+        },
+        {
+          "column_name": "cooling_concept",
+          "column_value": [
+            "Intelligent Fan Cooling",
+            "Intelligent Fan Cooling",
+            "Intelligent Fan Cooling",
+            "Intelligent Fan Cooling",
+            "Intelligent Fan Cooling"
+          ]
+        },
+        {
+          "column_name": "noise_emission_db",
+          "column_value": [
+            "<51",
+            "<51",
+            "<51",
+            "<55",
+            "<55"
+          ]
+        },
+        {
+          "column_name": "night_power_consumption_w",
+          "column_value": [
+            "<1",
+            "<1",
+            "<1",
+            "<1",
+            "<1"
+          ]
+        },
+        {
+          "column_name": "max_operation_altitude_m",
+          "column_value": [
+            "≤4000",
+            "≤4000",
+            "≤4000",
+            "≤4000",
+            "≤4000"
+          ]
+        },
+        {
+          "column_name": "emc_standard",
+          "column_value": [
+            "EN/IEC 61000-6-2, EN/IEC 61000-6-3, EN61000-3-2, EN61000-3-3, EN61000-3-11, EN61000-3-12",
+            "EN/IEC 61000-6-2, EN/IEC 61000-6-3, EN61000-3-2, EN61000-3-3, EN61000-3-11, EN61000-3-12",
+            "EN/IEC 61000-6-2, EN/IEC 61000-6-3, EN61000-3-2, EN61000-3-3, EN61000-3-11, EN61000-3-12",
+            "EN/IEC 61000-6-2, EN/IEC 61000-6-3, EN61000-3-2, EN61000-3-3, EN61000-3-11, EN61000-3-12",
+            "EN/IEC 61000-6-2, EN/IEC 61000-6-3, EN61000-3-2, EN61000-3-3, EN61000-3-11, EN61000-3-12"
+          ]
+        },
+        {
+          "column_name": "safety_standard",
+          "column_value": [
+            "IEC 60068, UL1741, EN62109",
+            "IEC 60068, UL1741, EN62109",
+            "IEC 60068, UL1741, EN62109",
+            "IEC 60068, UL1741, EN62109",
+            "IEC 60068, UL1741, EN62109"
+          ]
+        },
+        {
+          "column_name": "grid_connection_standard",
+          "column_value": [
+            "IEEE1547, CSA C22, EN50549, VDE4105, VDE0126, RD1699, ABNT NBR16149 & 16150, AS4777.2, NB/T32004, G98/G99, IEC61727",
+            "IEEE1547, CSA C22, EN50549, VDE4105, VDE0126, RD1699, ABNT NBR16149 & 16150, AS4777.2, NB/T32004, G98/G99, IEC61727",
+            "IEEE1547, CSA C22, EN50549, VDE4105, VDE0126, RD1699, ABNT NBR16149 & 16150, AS4777.2, NB/T32004, G98/G99, IEC61727",
+            "IEEE1547, CSA C22, EN50549, VDE4105, VDE0126, RD1699, ABNT NBR16149 & 16150, AS4777.2, NB/T32004, G98/G99, IEC61727",
+            "IEEE1547, CSA C22, EN50549, VDE4105, VDE0126, RD1699, ABNT NBR16149 & 16150, AS4477.2, NB/T32004, G98/G99, IEC61727"
+          ]
+        }
+      ],
+      "table_explanation": "This table outlines the technical specifications for Eastman's On-Grid PV Inverter Three Phase models in the 30 kW to 60 kW range. It details critical performance parameters including PV input, AC output, efficiency, comprehensive protection features, physical dimensions, environmental conditions, and regulatory certifications. This information is crucial for large-scale commercial and power plant PV system designs, ensuring optimal performance, safety, and compliance with global standards."
+    }
+  ],
+  "relations": [
+    {
+      "subject": "Eastman Auto & Power Limited",
+      "predicate": "operates_brand",
+      "object": "Eastman Solar",
+      "page_no": [1, 2, 3, 4, 5]
+    },
+    {
+      "subject": "Eastman Solar",
+      "predicate": "offers_product_line",
+      "object": "Afore BNT Series Three-phase string inverters",
+      "page_no": 3
+    },
+    {
+      "subject": "Afore BNT Series Three-phase string inverters",
+      "predicate": "has_power_range",
+      "object": "30-60 kW",
+      "page_no": 3
+    },
+    {
+      "subject": "Afore BNT Series Three-phase string inverters",
+      "predicate": "designed_for",
+      "object": "Commercial PV System Applications",
+      "page_no": 3
+    },
+    {
+      "subject": "Afore BNT Series Three-phase string inverters",
+      "predicate": "designed_for",
+      "object": "Power Plant PV System Applications",
+      "page_no": 3
+    },
+    {
+      "subject": "Afore BNT Series Three-phase string inverters",
+      "predicate": "has_housing_material",
+      "object": "Anodized Aluminum",
+      "page_no": 3
+    },
+    {
+      "subject": "Afore BNT Series Three-phase string inverters",
+      "predicate": "equipped_with",
+      "object": "External Inductors",
+      "page_no": 3
+    },
+    {
+      "subject": "System Status",
+      "predicate": "checked_via",
+      "object": "Online Portal",
+      "page_no": 3
+    },
+    {
+      "subject": "System Status",
+      "predicate": "checked_via",
+      "object": "APP",
+      "page_no": 3
+    },
+    {
+      "subject": "Afore BNT Series Three-phase string inverters",
+      "predicate": "has_efficiency",
+      "object": "MPPT efficiency > 99.9%",
+      "page_no": 3
+    },
+    {
+      "subject": "Afore BNT Series Three-phase string inverters",
+      "predicate": "features",
+      "object": "Intelligent Temperature Control System",
+      "page_no": 3
+    },
+    {
+      "subject": "Afore BNT Series Three-phase string inverters",
+      "predicate": "supports",
+      "object": "Active and reactive power compensation",
+      "page_no": 3
+    },
+    {
+      "subject": "Afore BNT Series Three-phase string inverters",
+      "predicate": "has_cooling_mechanism",
+      "object": "IP 68 Cooling Fan",
+      "page_no": 3
+    },
+    {
+      "subject": "Afore BNT Series Three-phase string inverters",
+      "predicate": "includes_protection",
+      "object": "Type II DC & AC lightning protection",
+      "page_no": 3
+    },
+    {
+      "subject": "Afore BNT Series Three-phase string inverters",
+      "predicate": "has_output_capability",
+      "object": "AC output 1.1x continuous operation",
+      "page_no": 3
+    },
+    {
+      "subject": "Eastman Auto & Power Limited",
+      "predicate": "has_office_address",
+      "object": "ASF Towers, 249, Udyog Vihar Phase-4, Gurugram, Haryana-122016, India",
+      "page_no": 6
+    },
+    {
+      "subject": "AMPS MIDDLE EAST FZ LLC",
+      "predicate": "has_office_address",
+      "object": "#703, 7TH Floor, Deira Twin Tower, Baniyas Square, Deira, Dubai (UAE)",
+      "page_no": 6
+    },
+    {
+      "subject": "GUANGDONG EASTMAN NEW ENERGY CO., LTD",
+      "predicate": "has_office_address",
+      "object": "#1602, Meilan business centre, Intersection of Xixiang Avenue and Qianjin Second Road, Bao'an, District, Shenzhen-518102, China",
+      "page_no": 6
+    },
+    {
+      "subject": "Eastman Auto & Power Limited",
+      "predicate": "has_website",
+      "object": "www.eastmanworld.com",
+      "page_no": 6
+    },
+    {
+      "subject": "Eastman Auto & Power Limited",
+      "predicate": "has_marketing_email",
+      "object": "marketing@eastmanworld.com",
+      "page_no": 6
+    },
+    {
+      "subject": "Eastman Auto & Power Limited",
+      "predicate": "has_social_media_presence_on_twitter",
+      "object": "@eastman_world",
+      "page_no": 6
+    },
+    {
+      "subject": "Eastman Auto & Power Limited",
+      "predicate": "has_social_media_presence_on_facebook",
+      "object": "@EastmanWorld",
+      "page_no": 6
+    },
+    {
+      "subject": "Eastman Auto & Power Limited",
+      "predicate": "has_social_media_presence_on_instagram",
+      "object": "@EastmanWorld",
+      "page_no": 6
+    },
+    {
+      "subject": "Eastman On-Grid PV Inverter Three-phase (3-10 kW)",
+      "predicate": "includes_model",
+      "object": "ES3KWT-GT",
+      "page_no": 1
+    },
+    {
+      "subject": "Eastman On-Grid PV Inverter Three-phase (3-10 kW)",
+      "predicate": "includes_model",
+      "object": "ES4KWT-GT",
+      "page_no": 1
+    },
+    {
+      "subject": "Eastman On-Grid PV Inverter Three-phase (3-10 kW)",
+      "predicate": "includes_model",
+      "object": "ES5KWT-GT",
+      "page_no": 1
+    },
+    {
+      "subject": "Eastman On-Grid PV Inverter Three-phase (3-10 kW)",
+      "predicate": "includes_model",
+      "object": "ES6KWT-GT",
+      "page_no": 1
+    },
+    {
+      "subject": "Eastman On-Grid PV Inverter Three-phase (3-10 kW)",
+      "predicate": "includes_model",
+      "object": "ES8KWT-GT",
+      "page_no": 1
+    },
+    {
+      "subject": "Eastman On-Grid PV Inverter Three-phase (3-10 kW)",
+      "predicate": "includes_model",
+      "object": "ES10KWT-GT",
+      "page_no": 1
+    },
+    {
+      "subject": "Eastman On-Grid PV Inverter Three-phase (12-25 kW)",
+      "predicate": "includes_model",
+      "object": "ES12KWT-GT",
+      "page_no": 2
+    },
+    {
+      "subject": "Eastman On-Grid PV Inverter Three-phase (12-25 kW)",
+      "predicate": "includes_model",
+      "object": "ES15KWT-GT",
+      "page_no": 2
+    },
+    {
+      "subject": "Eastman On-Grid PV Inverter Three-phase (12-25 kW)",
+      "predicate": "includes_model",
+      "object": "ES17KWT-GT",
+      "page_no": 2
+    },
+    {
+      "subject": "Eastman On-Grid PV Inverter Three-phase (12-25 kW)",
+      "predicate": "includes_model",
+      "object": "ES20KWT-GT",
+      "page_no": 2
+    },
+    {
+      "subject": "Eastman On-Grid PV Inverter Three-phase (12-25 kW)",
+      "predicate": "includes_model",
+      "object": "ES25KWT-GT",
+      "page_no": 2
+    },
+    {
+      "subject": "Eastman On-Grid PV Inverter Three-phase (30-60 kW)",
+      "predicate": "includes_model",
+      "object": "ES30KWT-GT",
+      "page_no": 5
+    },
+    {
+      "subject": "Eastman On-Grid PV Inverter Three-phase (30-60 kW)",
+      "predicate": "includes_model",
+      "object": "ES36KWT-GT",
+      "page_no": 5
+    },
+    {
+      "subject": "Eastman On-Grid PV Inverter Three-phase (30-60 kW)",
+      "predicate": "includes_model",
+      "object": "ES40KWT-GT",
+      "page_no": 5
+    },
+    {
+      "subject": "Eastman On-Grid PV Inverter Three-phase (30-60 kW)",
+      "predicate": "includes_model",
+      "object": "ES50KWT-GT",
+      "page_no": 5
+    },
+    {
+      "subject": "Eastman On-Grid PV Inverter Three-phase (30-60 kW)",
+      "predicate": "includes_model",
+      "object": "ES60KWT-GT",
+      "page_no": 5
+    }
+  ]
+}
+```

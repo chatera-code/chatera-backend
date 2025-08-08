@@ -1,0 +1,81 @@
+version: '3.8'
+
+services:
+  # This service now correctly mounts the project root and sets the PYTHONPATH
+  db-init:
+    build: ./main_app
+    container_name: db-init
+    command: python init_db.py
+    volumes:
+      - ./main_app:/app/main_app
+      - ./init_db.py:/app/init_db.py
+      - ./data:/app/data
+      # --- ADD THIS LINE: Give db-init access to the credentials ---
+      - ./chatera-468016-8285e644e1a1.json:/app/gcp_creds.json:ro
+    working_dir: /app
+    environment:
+      - PYTHONPATH=/app
+      # --- ADD THIS LINE: Tell db-init where to find the credentials ---
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/gcp_creds.json
+    env_file:
+      - .env
+
+  # The main, user-facing application
+  main_app:
+    build: ./main_app
+    container_name: main_app
+    ports:
+      - "8000:8000"  # Expose this service to your local machine on port 8000
+    volumes:
+      - ./main_app:/app  # Mount code for hot-reloading
+      - ./data:/app/data 
+      - ./chatera-468016-8285e644e1a1.json:/app/gcp_creds.json:ro
+
+    env_file:
+      - .env
+    environment:
+      # This tells the main app where to find the agent service
+      - SQL_AGENT_URL=http://sql_agent_service:8000/agent/generate-sql
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/gcp_creds.json
+
+    depends_on:
+      db-init:
+        condition: service_completed_successfully
+
+  # The internal SQL agent microservice
+  sql_agent_service:
+    build: ./sql_agent_service
+    container_name: sql_agent_service
+    # No 'ports' section needed unless you want to access it directly for testing
+    volumes:
+      - ./sql_agent_service:/app
+      - ./chatera-468016-8285e644e1a1.json:/app/gcp_creds.json:ro
+
+    environment:
+      # --- ADD THIS LINE: Point to the key file inside the container ---
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/gcp_creds.json
+
+    env_file:
+      - .env
+
+  # The internal file ingestion microservice
+  ingestion_service:
+    build: ./ingestion_service
+    container_name: ingestion_service
+    ports:
+      - "8002:8000" # Expose on 8002 if you need to call it directly
+    volumes:
+      - ./ingestion_service:/app
+      - ./data:/app/data 
+      - ./chatera-468016-8285e644e1a1.json:/app/gcp_creds.json:ro
+
+    environment:
+      # --- ADD THIS LINE: Point to the key file inside the container ---
+      - GOOGLE_APPLICATION_CREDENTIALS=/app/gcp_creds.json
+      
+    env_file:
+      - .env
+    
+    depends_on:
+      db-init:
+        condition: service_completed_successfully
